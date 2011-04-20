@@ -1,0 +1,193 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.bestgrid</groupId>
+	<artifactId>grisu-blast</artifactId>
+	<packaging>jar</packaging>
+	<version>0.1-SNAPSHOT</version>
+	<name>a grisu client</name>
+	
+	<properties>
+		<grisu-version>0.3.3.1</grisu-version>
+	</properties>	
+
+	<repositories>
+		<repository>
+			<id>bestgrid.public.release</id>
+			<url>http://dev.ceres.auckland.ac.nz/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>daily</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>bestgrid.public.snapshot</id>
+			<url>http://dev.ceres.auckland.ac.nz/nexus/content/groups/public-snapshots/
+			</url>
+			<releases>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>jboss</id>
+			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+
+	<!-- we can help you publish your artifact into our maven repository if 
+		you want. Write an email to markus.binsteiner@arcs.org.au and request a username/password 
+		for the ARCS maven repository. Then uncomment this part and edit your $HOME/.m2/settings.xml 
+		file with your username/password. Deployment is done via 'mvn clean install 
+		deploy' -->
+	<!-- 
+	<distributionManagement>
+		<repository>
+			<name>BeSTGRID Releases Repository</name>
+			<id>bestgrid.release2</id>
+			<url>http://er77.ceres.auckland.ac.nz/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>bestgrid.snapshot2</id>
+			<name>BeSTGRID Snapshots Repository</name>
+			<url>http://er77.ceres.auckland.ac.nz/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+	-->
+
+	<dependencies>
+
+		<!-- the main grisu dependency. -->
+		<dependency>
+			<groupId>grisu.frontend</groupId>
+			<artifactId>grisu-client</artifactId>
+			<version>${grisu-version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- we can't include the bouncy castle library in our assembled binary 
+			so it has to put in the classpath in some other way. You could either have 
+			the bcprov jar in the same directory as your executable jar, or you just 
+			do nothing. Grisu will try to download it in the background and put it in 
+			the classpath once your application is executed the first time... -->
+		<dependency>
+			<groupId>bouncycastle</groupId>
+			<artifactId>bcprov-jdk15</artifactId>
+			<version>145</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- further grisu dependencies, incuded by default but can be enabled/disabled 
+			if not needed and you want a smaller assembly -->
+		<!-- the grisu-core dependency is needed when you want to connect to a 
+			local backend (which is the only supported backend for grisu 0.3 at the moment -->
+		<!-- <dependency>
+			<groupId>grisu.backend</groupId>
+			<artifactId>grisu-core</artifactId>
+			<version>${grisu-version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>-->
+		<!-- this is needed for shibboleth logins - recommended that you don't disable it -->
+
+		<!-- test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+
+			<!-- replace version in file -->
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>maven-replacer-plugin</artifactId>
+				<version>1.3.2</version>
+				<executions>
+					<execution>
+						<!-- the replace should happen before the app is packaged -->
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<includes>
+						<!-- replace the token in this file -->
+						<include>target/classes/this-client.version</include>
+					</includes>
+					<regex>false</regex>
+					<!-- the name of the token to replace -->
+					<token>VERSION_TOKEN</token>
+					<!-- replace it with the maven project version -->
+					<value>${project.version}</value>
+				</configuration>
+			</plugin>
+
+			<!-- you can disable the assembly plugin if you want, your builds will 
+				be faster I find it quite handy to have maven build an executable jar, though -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+
+							<descriptors>
+								<descriptor>client.assembly.xml</descriptor>
+							</descriptors>
+							<finalName>grisu-blast</finalName>
+							<archive>
+								<index>true</index>
+								<manifest>
+									<mainClass>org.bestgrid.Client</mainClass>
+								</manifest>
+								<manifestEntries>
+									<Class-Path>bcprov.jar bcprov-jdk15-145.jar local-backend.jar
+									</Class-Path>
+								</manifestEntries>
+							</archive>
+
+						</configuration>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+
+</project>
+
