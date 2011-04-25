@@ -30,7 +30,7 @@ public class Client {
 		job.setCommandline("cat " + filename);
 		job.addInputFileUrl(args[0]);
 		job.setWalltimeInSeconds(60);
-		job.setSubmissionLocation("grid_aix:ng2hpc.canterbury.ac.nz#Loadleveler");
+		job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz");
 
 		job.setTimestampJobname("cat_job");
 
