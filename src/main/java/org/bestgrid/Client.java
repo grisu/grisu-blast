@@ -30,7 +30,9 @@ public class Client {
 		job.setCommandline("cat " + filename);
 		job.addInputFileUrl(args[0]);
 		job.setWalltimeInSeconds(60);
-		job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz");
+		job.setSubmissionLocation("serial_400:ng2hpc.canterbury.ac.nz#Loadleveler");
+		// the following does not work. Vlad confirmed correct settings on webmds. Ask Markus?
+		// job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler");
 
 		job.setTimestampJobname("cat_job");
 
@@ -38,7 +40,7 @@ public class Client {
 
 		try {
 			System.out.println("Creating job on backend...");
-			job.createJob("/ARCS/BeSTGRID");
+			job.createJob("/ARCS/LocalAccounts/CanterburyHPC");
 		} catch (JobPropertiesException e) {
 			System.err.println("Could not create job: "
 					+ e.getLocalizedMessage());
