@@ -111,6 +111,12 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>grisu.backend</groupId>
+			<artifactId>grisu-core</artifactId>
+			<version>${grisu-version}</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
