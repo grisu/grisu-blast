@@ -1,11 +1,14 @@
 package org.bestgrid;
 
+import grisu.model.FileManager;
+
 import grisu.control.ServiceInterface;
 import grisu.control.exceptions.JobPropertiesException;
 import grisu.control.exceptions.JobSubmissionException;
 import grisu.frontend.control.login.LoginManager;
 import grisu.frontend.model.job.JobObject;
 import grisu.jcommons.constants.Constants;
+import grisu.model.FileManager;
 
 public class Client {
 
@@ -21,12 +24,32 @@ public class Client {
 		}
 		
 		System.out.println("Creating job...");
-		
+		/*
+		JobObject job = new JobObject(si);
+		job.setApplication("UnixCommands");
+		String filename = FileManager.getFilename(args[0]);
+		job.setCommandline("cat " + filename);
+		job.addInputFileUrl(args[0]);
+		job.setWalltimeInSeconds(60);
+		job.setSubmissionLocation("serial_400:ng2hpc.canterbury.ac.nz#Loadleveler");
+		// the following does not work. Vlad confirmed correct settings on webmds. Ask Markus?
+		// job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler");
+
+		job.setTimestampJobname("cat_job");
+
+		System.out.println("Set jobname to be: " + job.getJobname());
+*/
 		BlastJobCLI job = new BlastJobCLI();
-		job.setVo("/ARCS/LocalAccounts/CanterburyHPC");
+		job.setVo("/ARCS/BeSTGRID");
 		job.setServiceInterface(si);
-		job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler");
-		job.setCommandline(args[0]);
+		job.setSubmissionLocation("grid_aix:ng2hpc.canterbury.ac.nz#Loadleveler");
+		//get the inputs
+		String theCommand = new String();
+		for(int i = 0; i < args.length; i++) {
+			theCommand = args[i] + " ";
+		}
+		
+		job.setCommandline(theCommand);
 		JobObject theJob = job.createJobObject();
 			
 		try {
@@ -38,8 +61,6 @@ public class Client {
 					+ e.getLocalizedMessage());
 			System.exit(1);
 		}
-
-		
 		
 		try {
 			System.out.println("Submitting job to the grid...");
