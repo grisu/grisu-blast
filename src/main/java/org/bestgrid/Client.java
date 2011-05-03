@@ -1,14 +1,11 @@
 package org.bestgrid;
 
-import grisu.model.FileManager;
-
 import grisu.control.ServiceInterface;
 import grisu.control.exceptions.JobPropertiesException;
 import grisu.control.exceptions.JobSubmissionException;
 import grisu.frontend.control.login.LoginManager;
 import grisu.frontend.model.job.JobObject;
 import grisu.jcommons.constants.Constants;
-import grisu.model.FileManager;
 
 public class Client {
 
