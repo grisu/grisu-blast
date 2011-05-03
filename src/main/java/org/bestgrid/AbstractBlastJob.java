@@ -56,7 +56,7 @@ public abstract class AbstractBlastJob {
 		blastJob.setCpus(getCpus());
 		blastJob.setSubmissionLocation(getSubmissionLocation());
 		// TODO maybe we need to switch between blast and mpiblast here?
-		blastJob.setApplication("mpiBlast");
+		blastJob.setApplication("mpiBLAST");
 		//blastJob.setForce_mpi(true);
 
 		blastJob.setCommandline(getCommandline());

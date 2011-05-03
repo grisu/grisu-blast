@@ -24,24 +24,12 @@ public class Client {
 		}
 		
 		System.out.println("Creating job...");
-		/*
-		JobObject job = new JobObject(si);
-		job.setApplication("UnixCommands");
-		String filename = FileManager.getFilename(args[0]);
-		job.setCommandline("cat " + filename);
-		job.addInputFileUrl(args[0]);
-		job.setWalltimeInSeconds(60);
-		job.setSubmissionLocation("serial_400:ng2hpc.canterbury.ac.nz#Loadleveler");
-		// the following does not work. Vlad confirmed correct settings on webmds. Ask Markus?
-		// job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler");
-
-		job.setTimestampJobname("cat_job");
-
-		System.out.println("Set jobname to be: " + job.getJobname());
-*/
+		
 		BlastJobCLI job = new BlastJobCLI();
 		job.setVo("/ARCS/LocalAccounts/CanterburyHPC");
 		job.setServiceInterface(si);
+		job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler");
+		job.setCommandline(args[0]);
 		JobObject theJob = job.createJobObject();
 			
 		try {
@@ -86,11 +74,6 @@ public class Client {
 				/*+ job.getStatusString(false));*/
 				+ theJob.getStatusString(false));
 
-		/*
-		System.out.println("Stdout: " + job.getStdOutContent());
-		System.out.println("Stderr: " + job.getStdErrContent());
-		*/
-		
 		System.out.println("Stdout: " + theJob.getStdOutContent());
 		System.out.println("Stderr: " + theJob.getStdErrContent());
 		
