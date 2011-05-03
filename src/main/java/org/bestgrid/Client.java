@@ -14,21 +14,23 @@ public class Client {
 		System.out.println("Logging in...");
 		ServiceInterface si = null;
 		try {
-			si = LoginManager.loginCommandline("BeSTGRID");
+			si = LoginManager.loginCommandline("Local");
 		} catch (Exception e) {
 			System.err.println("Could not login: " + e.getLocalizedMessage());
 			System.exit(1);
 		}
-		
+
 		System.out.println("Creating job...");
-		
+
 		BlastJobCLI job = new BlastJobCLI();
 		job.setVo("/ARCS/LocalAccounts/CanterburyHPC");
 		job.setServiceInterface(si);
 		job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler");
 		job.setCommandline(args[0]);
+
 		JobObject theJob = job.createJobObject();
-			
+
+		// theJob.setApplication("UnixCommands");
 		try {
 			System.out.println("Creating job on backend...");
 			//job.createJob("/ARCS/LocalAccounts/CanterburyHPC");
@@ -39,8 +41,8 @@ public class Client {
 			System.exit(1);
 		}
 
-		
-		
+
+
 		try {
 			System.out.println("Submitting job to the grid...");
 			//job.submitJob();
@@ -58,7 +60,7 @@ public class Client {
 		System.out.println("Job submission finished.");
 		System.out.println("Job submitted to: "
 				+ theJob.getJobProperty(Constants.SUBMISSION_SITE_KEY));
-				/*+ job.getJobProperty(Constants.SUBMISSION_SITE_KEY));*/
+		/*+ job.getJobProperty(Constants.SUBMISSION_SITE_KEY));*/
 
 		System.out.println("Waiting for job to finish...");
 
@@ -73,7 +75,7 @@ public class Client {
 
 		System.out.println("Stdout: " + theJob.getStdOutContent());
 		System.out.println("Stderr: " + theJob.getStdErrContent());
-		
+
 		// it's good practise to shutdown the jvm properly. There might be some
 		// executors running in the background
 		// and they need to know when to shutdown.

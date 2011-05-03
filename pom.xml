@@ -8,7 +8,7 @@
 	<name>a grisu client</name>
 	
 	<properties>
-		<grisu-version>0.3.3.1</grisu-version>
+		<grisu-version>0.3.3.2-SNAPSHOT</grisu-version>
 	</properties>	
 
 	<repositories>
