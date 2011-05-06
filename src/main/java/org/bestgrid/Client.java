@@ -1,6 +1,6 @@
 package org.bestgrid;
 
-import grisu.model.FileManager;
+import java.util.Scanner;
 
 import grisu.control.ServiceInterface;
 import grisu.control.exceptions.JobPropertiesException;
@@ -8,7 +8,8 @@ import grisu.control.exceptions.JobSubmissionException;
 import grisu.frontend.control.login.LoginManager;
 import grisu.frontend.model.job.JobObject;
 import grisu.jcommons.constants.Constants;
-import grisu.model.FileManager;
+//import grisu.model.FileManager;
+import org.apache.commons.cli.*;
 
 public class Client {
 
@@ -17,49 +18,49 @@ public class Client {
 		System.out.println("Logging in...");
 		ServiceInterface si = null;
 		try {
-			si = LoginManager.loginCommandline("Local");
+			si = LoginManager.loginCommandline("BeSTGRID");
 		} catch (Exception e) {
 			System.err.println("Could not login: " + e.getLocalizedMessage());
 			System.exit(1);
 		}
 
 		System.out.println("Creating job...");
-<<<<<<< HEAD
-		/*
-		JobObject job = new JobObject(si);
-		job.setApplication("UnixCommands");
-		String filename = FileManager.getFilename(args[0]);
-		job.setCommandline("cat " + filename);
-		job.addInputFileUrl(args[0]);
-		job.setWalltimeInSeconds(60);
-		job.setSubmissionLocation("serial_400:ng2hpc.canterbury.ac.nz#Loadleveler");
-		// the following does not work. Vlad confirmed correct settings on webmds. Ask Markus?
-		// job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler");
 
-		job.setTimestampJobname("cat_job");
+		
 
-		System.out.println("Set jobname to be: " + job.getJobname());
-*/
-=======
-
->>>>>>> ecdfe321c448326a5d95a4e0b78f60a35fbd95b6
 		BlastJobCLI job = new BlastJobCLI();
-		job.setVo("/ARCS/BeSTGRID");
-		job.setServiceInterface(si);
-<<<<<<< HEAD
-		job.setSubmissionLocation("grid_aix:ng2hpc.canterbury.ac.nz#Loadleveler");
-		//get the inputs
-		String theCommand = new String();
-		for(int i = 0; i < args.length; i++) {
-			theCommand = args[i] + " ";
+		
+		//getting arguments for job specification
+		int cpu = 1;
+		String submitLoc = "dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler";
+		String vo = "/ARCS/LocalAccounts/CanterburyHPC";
+		
+		if(args != null || args.length != 0) {
+			for (int i = 0; i < args.length; i++) {
+				if(args[i] == "cpu") {
+					cpu = Integer.parseInt(args[i+1]);
+				} else if(args[i] == "vo") {
+					vo = args[i+1];
+				} else if(args[i] == "sl") {
+					submitLoc = args[i+1];
+				}
+			} 
+			job.setServiceInterface(si);
+			job.setCpus(cpu);
+			job.setVo(vo);
+			job.setSubmissionLocation(submitLoc);
+		} else {
+			job.setServiceInterface(si);
+			job.setCpus(cpu);
+			job.setVo(vo);
+			job.setSubmissionLocation(submitLoc);
 		}
 		
-		job.setCommandline(theCommand);
-=======
-		job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler");
-		job.setCommandline(args[0]);
+		Scanner input = new Scanner(System.in);
+		System.out.println("enter blast command");
+		String command = input.nextLine();
+		job.setCommandline(command);
 
->>>>>>> ecdfe321c448326a5d95a4e0b78f60a35fbd95b6
 		JobObject theJob = job.createJobObject();
 
 		// theJob.setApplication("UnixCommands");
@@ -72,13 +73,8 @@ public class Client {
 					+ e.getLocalizedMessage());
 			System.exit(1);
 		}
-<<<<<<< HEAD
-		
-=======
 
 
-
->>>>>>> ecdfe321c448326a5d95a4e0b78f60a35fbd95b6
 		try {
 			System.out.println("Submitting job to the grid...");
 			//job.submitJob();

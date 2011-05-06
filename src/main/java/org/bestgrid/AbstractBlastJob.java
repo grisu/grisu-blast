@@ -17,7 +17,7 @@ public abstract class AbstractBlastJob {
 	public static final String DEFAULT_BLAST_JOBNAME = "blast";
 
 	protected PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-	private int cpus = 1;
+	private int cpus = 3;
 	private int walltimeInSeconds = 600;
 	private GridFile fastaFile;
 
