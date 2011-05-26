@@ -2,6 +2,8 @@ package org.bestgrid.view;
 
 //import java.util.Scanner;
 
+import org.bestgrid.control.CLIController;
+
 import grisu.control.ServiceInterface;
 import grisu.control.exceptions.JobPropertiesException;
 import grisu.control.exceptions.JobSubmissionException;
@@ -12,7 +14,6 @@ import grisu.frontend.model.job.JobObject;
 //import org.apache.commons.cli.*;
 //import org.bestgrid.model.BlastJobCLI;
 
-import control.CLIController;
 
 public class Interface {
 

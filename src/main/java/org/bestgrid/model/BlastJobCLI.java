@@ -9,6 +9,17 @@ public class BlastJobCLI extends AbstractBlastJob {
 	private int start;
 	private int stop;
 	
+	private int gencode;
+	private int eVal;
+	private int wSize;
+	private int open;
+	private int extend;
+	
+	private String matrix;
+	private String seg;
+	
+	private boolean lCaseMask;
+	
 	@Override
 	public String getCommandline() {
 		return commandline;
@@ -33,4 +44,35 @@ public class BlastJobCLI extends AbstractBlastJob {
 		stop = Integer.parseInt(parameters[1]);
 	}
 	
+	public void setGeneticCode(int gencode) {
+		this.gencode = gencode;
+	}
+	
+	public void setExpectationValue(int eVal) {
+		this.eVal = eVal;
+	}
+	
+	public void setWordSize(int wSize) {
+		this.wSize = wSize;
+	}
+	
+	public void setOpenCost(int gO) {
+		open = gO;
+	}
+	
+	public void setExtendCost(int gE) {
+		extend = gE;
+	}
+	
+	public void setMatrix(String matrix) {
+		this.matrix = matrix;
+	}
+	
+	public void setSEGFilter(String seg) {
+		this.seg = seg;
+	}
+	
+	public void setLowerCaseFilter(boolean isEnabled) {
+		this.lCaseMask = isEnabled;
+	}
 }
