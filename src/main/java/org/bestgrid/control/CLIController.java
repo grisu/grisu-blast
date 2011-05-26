@@ -14,6 +14,8 @@ import grisu.model.GrisuRegistryManager;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 //import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -55,6 +57,7 @@ public class CLIController {
 		CommandLineParser parser = new GnuParser();
 		
 		try {
+			System.out.println("check parsing");
 			CommandLine line = parser.parse(options, args);			
 
 			if(line.hasOption("cpu")) {
@@ -111,7 +114,11 @@ public class CLIController {
 		opt.addOption("sl", true, "location to submit the job");
 		
 		//add options for blast types
-		opt.addOption("type", true, "blast application to use");
+		OptionBuilder blastOption = OptionBuilder.withLongOpt("type");
+		blastOption = blastOption.withDescription("blast application to use");
+		blastOption = blastOption.hasArg();
+		blastOption = blastOption.isRequired();
+		opt.addOption(blastOption.create());
 		
 		return this.options = opt;
 	}
