@@ -88,6 +88,9 @@ public class CLIController {
 			}
 			
 			if(line.hasOption("type")) {
+				String option = line.getOptionValue("type");
+				System.out.println("XXX: " + option);
+				/*
 				if(line.getOptionValue("type").equals("blastn")) setBlastNOptions();
 				if(line.getOptionValue("type").equals("blastp")) setBlastPOptions();
 				if(line.getOptionValue("type").equals("blastx")) {
@@ -97,11 +100,12 @@ public class CLIController {
 					
 				}
 				if(line.getOptionValue("type").equals("tblastn")) setTBlastNOptions();
-				if(line.getOptionValue("type").equals("tblastx")) setTBlastXOptions();
+				if(line.getOptionValue("type").equals("tblastx")) setTBlastXOptions();*/
 			}
 		} 
 		catch(ParseException exp) {
 			System.err.println("Parsing failed. Reason: " + exp.getMessage());
+			exp.printStackTrace();
 			System.exit(1);
 		}
 	}
