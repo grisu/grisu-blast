@@ -2,6 +2,7 @@ package org.bestgrid.view;
 
 //import java.util.Scanner;
 
+import org.apache.commons.cli.ParseException;
 import org.bestgrid.control.CLIController;
 
 import grisu.control.ServiceInterface;
@@ -19,22 +20,31 @@ public class Interface {
 
 	public static void main(String[] args) {
 
-		System.out.println("Logging in...");
 		ServiceInterface si = null;
+		System.out.println("Checking arguments...");
+		
+		CLIController jobControl = new CLIController();
+
 		try {
-			si = LoginManager.loginCommandline("Local");
+			jobControl.process(args);
+		} catch(ParseException exp) {
+			System.err.println("Parsing failed. Reason: " + exp.getMessage());
+			System.exit(1);
+			}
+
+		System.out.println("Logging in...");
+		
+		try {
+			si = LoginManager.loginCommandline("BeSTGRID");
 		} catch (Exception e) {
 			System.err.println("Could not login: " + e.getLocalizedMessage());
 			System.exit(1);
 		}
 
-		System.out.println("Creating job...");
-		
-		CLIController jobControl = new CLIController();
-		
 		jobControl.setServiceInterface(si);
 		jobControl.createJob();
-		jobControl.process(args);
+		
+		System.out.println("Creating job...");
 
 		JobObject theJob = jobControl.getJobObject().createJobObject();
 		

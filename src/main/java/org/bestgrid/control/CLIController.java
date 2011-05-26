@@ -21,6 +21,7 @@ import org.bestgrid.model.BlastJobCLI;
 
 public class CLIController {
 	private Options options;
+	private Options blastOptions;
 	private BlastJobCLI job;
 	private ServiceInterface si;
 	private FileManager fm;
@@ -34,17 +35,18 @@ public class CLIController {
 		return job;
 	}
 	
-	public void process(String[] args) {
+	public void process(String[] args) throws ParseException {
 		createOptions();
 
-		System.out.println("Creating job...");
-		createJob();
+		//System.out.println("Creating job...");
+		//createJob();
+		job = new BlastJobCLI();
 		
 		int cpu = 3;
 		String submitLoc = "dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler";
 		String vo = "/ARCS/LocalAccounts/CanterburyHPC";
 		
-		job.setServiceInterface(getServiceInterface());
+		//job.setServiceInterface(getServiceInterface());
 		job.setCpus(cpu);
 		job.setSubmissionLocation(submitLoc);
 		job.setVo(vo);
@@ -86,7 +88,7 @@ public class CLIController {
 				if(line.getOptionValue("type").equals("blastn")) setBlastNOptions();
 				if(line.getOptionValue("type").equals("blastp")) setBlastPOptions();
 				if(line.getOptionValue("type").equals("blastx")) {
-					setBlastXOptions();
+					createBlastXOptions();
 					job.setCommandline("blastx ");
 					processBlastX(args);
 					
@@ -97,6 +99,7 @@ public class CLIController {
 		} 
 		catch(ParseException exp) {
 			System.err.println("Parsing failed. Reason: " + exp.getMessage());
+			System.exit(1);
 		}
 	}
 	
@@ -121,23 +124,29 @@ public class CLIController {
 		
 	}
 
-	public void setBlastXOptions() {
-		options.addOption("query", true, "Input file name");
-		options.addOption("query_loc", true, "Location on the query sequence " +
+	public Options createBlastXOptions() {
+		System.out.println("Creating blastx options");
+		Options opt = this.options;
+		
+		opt.addOption("query", true, "Input file name");
+		opt.addOption("query_loc", true, "Location on the query sequence " +
 				"in 1-based offsets (format:start-stop)");
-		options.addOption("query-gencode", true, "Genetic code to use to " +
+		opt.addOption("query-gencode", true, "Genetic code to use to " +
 				"translate query. Default = '1'");
-		options.addOption("evalue", true, "Expectation value (E) threshold for " +
+		opt.addOption("evalue", true, "Expectation value (E) threshold for " +
 				"saving hits. Default ='10'");
-		options.addOption("word_size", true, "Word size for wordfinder algorithm");
-		options.addOption("gapopen", true, "Cost to open a gap");
-		options.addOption("gapextend", true, "Cost to extend a gap");
-		options.addOption("matrix", true, "Scoring matrix name (normally BLOSUM62)");
-		options.addOption("seg", true, "Filter query sequence with SEG " +
+		opt.addOption("word_size", true, "Word size for wordfinder algorithm");
+		opt.addOption("gapopen", true, "Cost to open a gap");
+		opt.addOption("gapextend", true, "Cost to extend a gap");
+		opt.addOption("matrix", true, "Scoring matrix name (normally BLOSUM62)");
+		opt.addOption("seg", true, "Filter query sequence with SEG " +
 				"(Format: 'yes', 'window locut hicut', or 'no' to disable). " +
 				"Default = '12 2.2 2.5'");
-		options.addOption("lcase_masking", false, "Use lower case filtering in query" +
+		opt.addOption("lcase_masking", false, "Use lower case filtering in query" +
 				" and subject sequence(s)?");
+		
+		return this.blastOptions = opt;
+		
 	}
 
 	public void setTBlastNOptions() {
