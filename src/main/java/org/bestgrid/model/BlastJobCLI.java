@@ -75,4 +75,8 @@ public class BlastJobCLI extends AbstractBlastJob {
 	public void setLowerCaseFilter(boolean isEnabled) {
 		this.lCaseMask = isEnabled;
 	}
+	
+	public void ifInteger(String toCheck) throws NumberFormatException {
+		Integer.parseInt(toCheck);
+	}
 }

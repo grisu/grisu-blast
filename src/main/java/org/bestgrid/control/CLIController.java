@@ -16,6 +16,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.PosixParser;
 //import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -54,7 +55,12 @@ public class CLIController {
 		job.setVo(vo);
 		
 		//getting arguments for job specification
-		CommandLineParser parser = new GnuParser();
+		CommandLineParser parser = new PosixParser();
+		
+		//testing the contents of args
+		for(int i = 0; i < args.length; i++) {
+			System.out.println(args[i] + " ");
+		}
 		
 		try {
 			System.out.println("check parsing");
@@ -116,14 +122,25 @@ public class CLIController {
 		opt.addOption("cpu", true, "number of CPUs to use");
 		opt.addOption("vo", true, "VO to use");
 		opt.addOption("sl", true, "location to submit the job");
-		
+
+		opt.addOption(OptionBuilder.withLongOpt( "type" )
+                .withDescription( "blast application to use" )
+                .hasArg()
+                .withArgName("blast")
+                .create() );
+/*
+		Option blast = new Option("t", "type", true, "blast application to use");
+		blast.setValueSeparator('=');
+		opt.addOption(blast);
+	*/	
 		//add options for blast types
+		/*
 		OptionBuilder blastOption = OptionBuilder.withLongOpt("type");
 		blastOption = blastOption.withDescription("blast application to use");
 		blastOption = blastOption.hasArg();
 		blastOption = blastOption.isRequired();
 		opt.addOption(blastOption.create());
-		
+		*/
 		return this.options = opt;
 	}
 	
