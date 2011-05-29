@@ -52,20 +52,20 @@
 		for the ARCS maven repository. Then uncomment this part and edit your $HOME/.m2/settings.xml 
 		file with your username/password. Deployment is done via 'mvn clean install 
 		deploy' -->
-	<!-- 
+
 	<distributionManagement>
 		<repository>
 			<name>BeSTGRID Releases Repository</name>
-			<id>bestgrid.release2</id>
-			<url>http://er77.ceres.auckland.ac.nz/nexus/content/repositories/releases</url>
+			<id>bestgrid.release</id>
+			<url>http://code.ceres.auckland.ac.nz/nexus/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>bestgrid.snapshot2</id>
+			<id>bestgrid.snapshot</id>
 			<name>BeSTGRID Snapshots Repository</name>
-			<url>http://er77.ceres.auckland.ac.nz/nexus/content/repositories/snapshots</url>
+			<url>http://code.ceres.auckland.ac.nz/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	-->
+
 
 	<dependencies>
 
@@ -126,6 +126,21 @@
 		</dependency>
 	</dependencies>
 
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/grisu/grisu-virtscreen/issues</url>
+	</issueManagement>
+	<ciManagement>
+	</ciManagement>
+	<scm>
+		<connection>scm:git:git://github.com/grisu/grisu-virtscreen.git</connection>
+		<developerConnection>scm:git:git@github.com:grisu/grisu-virtscreen.git</developerConnection>
+		<url>https://github.com/grisu/grisu-virtscreen</url>
+	</scm>
+	<organization>
+		<name>BeSTGRID</name>
+		<url>http://bestgrid.org</url>
+	</organization>
 	<build>
 
 		<plugins>
@@ -182,7 +197,7 @@
 							<archive>
 								<index>true</index>
 								<manifest>
-									<mainClass>org.bestgrid.Client</mainClass>
+									<mainClass>org.bestgrid.view.Interface</mainClass>
 								</manifest>
 								<manifestEntries>
 									<Class-Path>bcprov.jar bcprov-jdk15-145.jar local-backend.jar
