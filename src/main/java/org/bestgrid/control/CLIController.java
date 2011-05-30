@@ -237,11 +237,10 @@ public class CLIController {
 				int g;
 				
 				try {
-					g = Integer.parseInt(line.getOptionValue("query_gencode"));
-					job.setGeneticCode(g);
+					job.setGeneticCode(line.getOptionValue("query_gencode"));
 				} catch(NumberFormatException e) {
 					System.out.println("query_gencode value must be integer");
-					System.exit(1);
+					//System.exit(1);
 				}
 				
 				job.addCommand("-query_gencode " + line.getOptionValue("query_gencode"));
@@ -257,7 +256,7 @@ public class CLIController {
 					if(e < 0) {
 						System.out.println("evalue argument is not real number");
 						System.exit(1);
-					} else job.setExpectationValue(e);
+					} else job.setExpectationValue(line.getOptionValue("evalue"));
 				} catch(NumberFormatException nFE) {
 					System.out.println("evalue must be integer");
 					System.exit(1);
@@ -276,7 +275,7 @@ public class CLIController {
 					if(w < 2) {
 						System.out.println("word size must be more than 2");
 						System.exit(1);
-					} else job.setExpectationValue(w);
+					} else job.setWordSize(line.getOptionValue("word_size"));
 				} catch(NumberFormatException nFE) {
 					System.out.println("word size must be integer");
 					System.exit(1);
@@ -291,7 +290,7 @@ public class CLIController {
 				int gO;
 				try {
 					gO = Integer.parseInt(line.getOptionValue("gapopen"));
-					job.setOpenCost(gO);
+					job.setOpenCost(line.getOptionValue("gapopen"));
 				} catch(NumberFormatException nFE) {
 					System.out.println("the cost for opening a gap " +
 							"should be in integer format");
@@ -306,7 +305,7 @@ public class CLIController {
 				int gE;
 				try {
 					gE = Integer.parseInt(line.getOptionValue("evalue"));
-					job.setExtendCost(gE);
+					job.setExtendCost(line.getOptionValue("evalue"));
 				} catch(NumberFormatException nFE) {
 					System.out.println("the cost for extending a gap " +
 							"should be in integer format");
