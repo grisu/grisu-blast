@@ -322,16 +322,12 @@ public class CLIController {
 			}
 			
 			if(line.hasOption("seg")) {
-				//make sure seg arguments are correct
-				if(line.getOptionValue("seg").equalsIgnoreCase("yes") || 
-						line.getOptionValue("seg").equalsIgnoreCase("yes") ||
-						line.getOptionValue("seg").equalsIgnoreCase("window locut hicut")) {
+				try {
 					job.setSEGFilter(line.getOptionValue("seg"));
 					job.addCommand("-seg " + line.getOptionValue("seg"));
 					job.setCommandline(job.getCommand());
-				} else {
-					System.out.println("invalid SEG argument");
-					System.exit(1);
+				} catch (Exception e){
+					System.out.println("seg argument failed. Reason: " + e.getMessage());
 				}
 			}
 			
