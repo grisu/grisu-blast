@@ -70,8 +70,12 @@ public class BlastJobCLI extends AbstractBlastJob {
 		this.matrix = matrix;
 	}
 	
-	public void setSEGFilter(String seg) {
-		this.seg = seg;
+	public void setSEGFilter(String seg) throws Exception {
+		//make sure seg arguments are correct
+		if(seg.equalsIgnoreCase("yes") ||seg.equalsIgnoreCase("no") ||
+				seg.equalsIgnoreCase("window locut hicut")) {
+			throw new Exception("invalid seg argument");
+		} else	this.seg = seg;
 	}
 	
 	public void setLowerCaseFilter(boolean isEnabled) {
