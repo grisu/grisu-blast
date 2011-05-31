@@ -30,10 +30,6 @@ public class CLIController {
 	private FileManager fm;
 	//private String command;
 	
-	public void createJob() {
-		job = new BlastJobCLI();
-	}
-	
 	public BlastJobCLI getJobObject(){
 		return job;
 	}
@@ -266,7 +262,7 @@ public class CLIController {
 	}
 	
 	public void processBlastP(String[] theArgs) {
-		CommandLineParser parser = new GnuParser();
+		CommandLineParser parser = new PosixParser();
 		
 		try {
 			CommandLine line = parser.parse(options, theArgs);			
@@ -410,7 +406,7 @@ public class CLIController {
 	}
 	
 	public void processBlastX(String[] theArgs) {
-		CommandLineParser parser = new GnuParser();
+		CommandLineParser parser = new PosixParser();
 		
 		try {
 			CommandLine line = parser.parse(options, theArgs);			
@@ -545,7 +541,7 @@ public class CLIController {
 	}
 	
 	public void processTBlastN(String[] theArgs) {
-		CommandLineParser parser = new GnuParser();
+		CommandLineParser parser = new PosixParser();
 		
 		try {
 			CommandLine line = parser.parse(options, theArgs);			
@@ -698,7 +694,7 @@ public class CLIController {
 	}
 	
 	public void processTBlastX(String[] theArgs) {
-		CommandLineParser parser = new GnuParser();
+		CommandLineParser parser = new PosixParser();
 		
 		try {
 			CommandLine line = parser.parse(options, theArgs);			
@@ -820,6 +816,7 @@ public class CLIController {
 	public void setServiceInterface(ServiceInterface si) {
 		this.si = si;
 		this.fm = GrisuRegistryManager.getDefault(si).getFileManager();
+		job.setServiceInterface(this.si);
 	}
 	
 }

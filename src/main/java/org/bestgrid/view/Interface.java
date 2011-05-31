@@ -5,6 +5,7 @@ package org.bestgrid.view;
 import org.apache.commons.cli.ParseException;
 import org.bestgrid.control.CLIController;
 
+import grisu.backend.model.job.Job;
 import grisu.control.ServiceInterface;
 import grisu.control.exceptions.JobPropertiesException;
 import grisu.control.exceptions.JobSubmissionException;
@@ -35,17 +36,20 @@ public class Interface {
 		System.out.println("Logging in...");
 		
 		try {
-			si = LoginManager.loginCommandline("BeSTGRID");
+			si = LoginManager.loginCommandline("BeSTGRID-DEV");
 		} catch (Exception e) {
 			System.err.println("Could not login: " + e.getLocalizedMessage());
 			System.exit(1);
 		}
 
 		jobControl.setServiceInterface(si);
-		jobControl.createJob();
+		//jobControl.createJob();
 		
 		System.out.println("Creating job...");
 
+		jobControl.setServiceInterface(si);
+		jobControl.getJobObject().
+		setCommandline(jobControl.getJobObject().getCommandline());
 		JobObject theJob = jobControl.getJobObject().createJobObject();
 		
 		try {
