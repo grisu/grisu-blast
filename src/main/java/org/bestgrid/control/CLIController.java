@@ -98,23 +98,20 @@ public class CLIController {
 				//System.out.println("XXX: " + option);
 				
 				if(line.getOptionValue("type").equals("blastn")) setBlastNOptions();
-				if(line.getOptionValue("type").equals("blastp")) {
+				else if(line.getOptionValue("type").equals("blastp")) {
 					createBlastPOptions();
 					job.setCommandline("blastp ");
 					processBlastP(args);
-				}
-				if(line.getOptionValue("type").equals("blastx")) {
+				} else if(line.getOptionValue("type").equals("blastx")) {
 					createBlastXOptions();
 					job.setCommandline("blastx ");
 					processBlastX(args);
 					
-				}
-				if(line.getOptionValue("type").equals("tblastn")) {
+				} else if(line.getOptionValue("type").equals("tblastn")) {
 					createTBlastNOptions();
 					job.setCommandline("tblastn ");
 					processTBlastX(args);
-				}
-				if(line.getOptionValue("type").equals("tblastx")) {
+				} else if(line.getOptionValue("type").equals("tblastx")) {
 					createTBlastXOptions();
 					job.setCommandline("tblastx ");
 					processTBlastX(args);
@@ -195,7 +192,7 @@ public class CLIController {
 		opt.addOption("query", true, "Input file name");
 		opt.addOption("query_loc", true, "Location on the query sequence " +
 				"in 1-based offsets (format:start-stop)");
-		opt.addOption("query-gencode", true, "Genetic code to use to " +
+		opt.addOption("query_gencode", true, "Genetic code to use to " +
 				"translate query. Default = '1'");
 		opt.addOption("evalue", true, "Expectation value (E) threshold for " +
 				"saving hits. Default ='10'");
