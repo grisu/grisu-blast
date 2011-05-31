@@ -17,7 +17,9 @@ public class BlastJobCLI extends AbstractBlastJob {
 	
 	private String matrix;
 	private String seg;
+	private String cstat;
 	
+	private boolean softMask;
 	private boolean lCaseMask;
 	
 	@Override
@@ -39,9 +41,15 @@ public class BlastJobCLI extends AbstractBlastJob {
 		return this.commandline;
 	}
 	
-	public void setQueryLocation(String[] parameters) throws NumberFormatException {
-		start = Integer.parseInt(parameters[0]);
-		stop = Integer.parseInt(parameters[1]);
+	public void setQueryLocation(String parameters) throws NumberFormatException, Exception {
+		//verify input
+		if(parameters.indexOf('-') < 0) {
+			throw new Exception("Invalid formatting for query_loc");
+		} else {
+			String[] param = parameters.split("-");
+			start = Integer.parseInt(param[0]);
+			stop = Integer.parseInt(param[1]);
+		}
 	}
 	
 	public void setGeneticCode(String gencode) throws NumberFormatException {
@@ -70,19 +78,36 @@ public class BlastJobCLI extends AbstractBlastJob {
 		this.matrix = matrix;
 	}
 	
+	public void setCompBasedStat(String stat) throws Exception {
+		//check if correct value
+		if(stat.equalsIgnoreCase("d") || stat.equalsIgnoreCase("0") || 
+				stat.equalsIgnoreCase("1") || stat.equalsIgnoreCase("2") || 
+				stat.equalsIgnoreCase("3") || stat.equalsIgnoreCase("f")) {
+			this.cstat = stat;
+		} else throw new Exception ("invalid value for composition based statistics");
+	}
+	
 	public void setSEGFilter(String seg) throws Exception {
 		//make sure seg arguments are correct
 		if(seg.equalsIgnoreCase("yes") ||seg.equalsIgnoreCase("no") ||
 				seg.equalsIgnoreCase("window locut hicut")) {
-			throw new Exception("invalid seg argument");
-		} else	this.seg = seg;
+			this.seg = seg;
+		} else throw new Exception("invalid seg argument");
+	}
+	
+	public void setSoftMasking(String boolValue) throws Exception{
+		//check if boolean
+		if(boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("false")) {
+			this.softMask = Boolean.parseBoolean(boolValue);
+		} else throw new Exception("invalid value set for soft_masking");		
 	}
 	
 	public void setLowerCaseFilter(boolean isEnabled) {
 		this.lCaseMask = isEnabled;
 	}
 	
+	/*
 	public void ifInteger(String toCheck) throws NumberFormatException {
 		Integer.parseInt(toCheck);
-	}
+	}*/
 }
