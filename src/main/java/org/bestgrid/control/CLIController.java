@@ -53,6 +53,9 @@ public class CLIController {
 		//getting arguments for job specification
 		CommandLineParser parser = new PosixParser();
 		
+		//setting mpiblast commandline parameter
+		job.setCommandline("mpiblast -p ");
+		
 		//testing the contents of args
 		for(int i = 0; i < args.length; i++) {
 			System.out.println(args[i] + " ");
@@ -96,20 +99,20 @@ public class CLIController {
 				if(line.getOptionValue("type").equals("blastn")) setBlastNOptions();
 				else if(line.getOptionValue("type").equals("blastp")) {
 					createBlastPOptions();
-					job.setCommandline("blastp ");
+					job.append("blastp ");
 					processBlastP(args);
 				} else if(line.getOptionValue("type").equals("blastx")) {
 					createBlastXOptions();
-					job.setCommandline("blastx ");
+					job.append("blastx ");
 					processBlastX(args);
 					
 				} else if(line.getOptionValue("type").equals("tblastn")) {
 					createTBlastNOptions();
-					job.setCommandline("tblastn ");
+					job.append("tblastn ");
 					processTBlastX(args);
 				} else if(line.getOptionValue("type").equals("tblastx")) {
 					createTBlastXOptions();
-					job.setCommandline("tblastx ");
+					job.append("tblastx ");
 					processTBlastX(args);
 				}
 			}
@@ -158,7 +161,7 @@ public class CLIController {
 		System.out.println("Creating blastp options");
 		Options opt = this.options;
 		
-		opt.addOption("query", true, "Input file name");
+		opt.addOption("i", "query", true, "Input file name");
 		opt.addOption("query_loc", true, "Location on the query sequence " +
 				"in 1-based offsets (format:start-stop)");
 		opt.addOption("evalue", true, "Expectation value (E) threshold for " +
@@ -185,7 +188,7 @@ public class CLIController {
 		System.out.println("Creating blastx options");
 		Options opt = this.options;
 		
-		opt.addOption("query", true, "Input file name");
+		opt.addOption("i", "query", true, "Input file name");
 		opt.addOption("query_loc", true, "Location on the query sequence " +
 				"in 1-based offsets (format:start-stop)");
 		opt.addOption("query_gencode", true, "Genetic code to use to " +
@@ -210,7 +213,7 @@ public class CLIController {
 		System.out.println("Creating tblastn options");
 		Options opt = this.options;
 		
-		opt.addOption("query", true, "Input file name");
+		opt.addOption("i", "query", true, "Input file name");
 		opt.addOption("query_loc", true, "Location on the query sequence " +
 				"in 1-based offsets (format:start-stop)");
 		
@@ -240,7 +243,7 @@ public class CLIController {
 		System.out.println("Creating tblastx options");
 		Options opt = this.options;
 		
-		opt.addOption("query", true, "Input file name");
+		opt.addOption("i", "query", true, "Input file name");
 		opt.addOption("query_loc", true, "Location on the query sequence " +
 				"in 1-based offsets (format:start-stop)");
 		opt.addOption("query-gencode", true, "Genetic code to use to " +
@@ -268,20 +271,17 @@ public class CLIController {
 			CommandLine line = parser.parse(options, theArgs);			
 
 			if(line.hasOption("query")) {
-				try {
-					job.setFastaFile(line.getOptionValue("query"));
-					job.addCommand("-query " + line.getOptionValue("query"));
-					job.setCommandline(job.getCommand());
-				} catch (RemoteFileSystemException e) {
-					System.out.println("Invalid argument for query");
-					System.exit(1);
-				}
+				setQuery(line, "query");
 			} 
+			
+			if(line.hasOption("i")) {
+				setQuery(line, "i");
+			}
 			
 			if(line.hasOption("query_loc")) {
 				try {
 					job.setQueryLocation(line.getOptionValue("query_loc"));
-					job.addCommand("-query_loc " + line.getOptionValue("query_loc"));
+					job.append("-query_loc " + line.getOptionValue("query_loc"));
 					job.setCommandline(job.getCommand());
 				} catch (NumberFormatException e) {
 					System.out.println("query_loc option failed. Reason:" 
@@ -296,7 +296,7 @@ public class CLIController {
 				
 				try {
 					job.setGeneticCode(line.getOptionValue("query_gencode"));
-					job.addCommand("-query_gencode " + line.getOptionValue("query_gencode"));
+					job.append("-query_gencode " + line.getOptionValue("query_gencode"));
 					job.setCommandline(job.getCommand());
 				} catch(NumberFormatException e) {
 					System.out.println("query_gencode value must be integer");
@@ -320,7 +320,7 @@ public class CLIController {
 					System.exit(1);
 				}
 				
-				job.addCommand("-evalue " + line.getOptionValue("evalue"));
+				job.append("-evalue " + line.getOptionValue("evalue"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -339,7 +339,7 @@ public class CLIController {
 					System.exit(1);
 				}
 				
-				job.addCommand("-word_size " + line.getOptionValue("word_size"));
+				job.append("-word_size " + line.getOptionValue("word_size"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -353,7 +353,7 @@ public class CLIController {
 							"should be in integer format");
 					System.exit(1);
 				}
-				job.addCommand("-gapopen " + line.getOptionValue("gapopen"));
+				job.append("-gapopen " + line.getOptionValue("gapopen"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -367,13 +367,13 @@ public class CLIController {
 							"should be in integer format");
 					System.exit(1);
 				}
-				job.addCommand("-gapextend " + line.getOptionValue("gapextend"));
+				job.append("-gapextend " + line.getOptionValue("gapextend"));
 				job.setCommandline(job.getCommand());
 			}
 			
 			if(line.hasOption("matrix")) {
 				job.setMatrix(line.getOptionValue("matrix"));
-				job.addCommand("-matrix " + line.getOptionValue("matrix"));
+				job.append("-matrix " + line.getOptionValue("matrix"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -389,7 +389,7 @@ public class CLIController {
 			if(line.hasOption("seg")) {
 				try {
 					job.setSEGFilter(line.getOptionValue("seg"));
-					job.addCommand("-seg " + line.getOptionValue("seg"));
+					job.append("-seg " + line.getOptionValue("seg"));
 					job.setCommandline(job.getCommand());
 				} catch (Exception e){
 					System.out.println("seg argument failed. Reason: " + e.getMessage());
@@ -398,7 +398,7 @@ public class CLIController {
 			
 			if(line.hasOption("lcase_masking")) {
 				job.setLowerCaseFilter(true);
-				job.addCommand("-lcase_masking ");
+				job.append("-lcase_masking ");
 			}
 		}catch(ParseException exp) {
 			System.err.println("Parsing failed. Reason: " + exp.getMessage());
@@ -412,20 +412,17 @@ public class CLIController {
 			CommandLine line = parser.parse(options, theArgs);			
 
 			if(line.hasOption("query")) {
-				try {
-					job.setFastaFile(line.getOptionValue("query"));
-					job.addCommand("-query " + line.getOptionValue("query"));
-					job.setCommandline(job.getCommand());
-				} catch (RemoteFileSystemException e) {
-					System.out.println("Invalid argument for query");
-					System.exit(1);
-				}
+				setQuery(line, "query");
 			} 
+			
+			if(line.hasOption("i")) {
+				setQuery(line, "i");
+			}
 			
 			if(line.hasOption("query_loc")) {
 				try {
 					job.setQueryLocation(line.getOptionValue("query_loc"));
-					job.addCommand("-query_loc " + line.getOptionValue("query_loc"));
+					job.append("-query_loc " + line.getOptionValue("query_loc"));
 					job.setCommandline(job.getCommand());
 				} catch (NumberFormatException e) {
 					System.out.println("query_loc option failed. Reason:" 
@@ -445,7 +442,7 @@ public class CLIController {
 					//System.exit(1);
 				}
 				
-				job.addCommand("-query_gencode " + line.getOptionValue("query_gencode"));
+				job.append("-query_gencode " + line.getOptionValue("query_gencode"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -464,7 +461,7 @@ public class CLIController {
 					System.exit(1);
 				}
 				
-				job.addCommand("-evalue " + line.getOptionValue("evalue"));
+				job.append("-evalue " + line.getOptionValue("evalue"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -483,7 +480,7 @@ public class CLIController {
 					System.exit(1);
 				}
 				
-				job.addCommand("-word_size " + line.getOptionValue("word_size"));
+				job.append("-word_size " + line.getOptionValue("word_size"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -497,7 +494,7 @@ public class CLIController {
 							"should be in integer format");
 					System.exit(1);
 				}
-				job.addCommand("-gapopen " + line.getOptionValue("gapopen"));
+				job.append("-gapopen " + line.getOptionValue("gapopen"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -511,20 +508,20 @@ public class CLIController {
 							"should be in integer format");
 					System.exit(1);
 				}
-				job.addCommand("-gapextend " + line.getOptionValue("gapextend"));
+				job.append("-gapextend " + line.getOptionValue("gapextend"));
 				job.setCommandline(job.getCommand());
 			}
 			
 			if(line.hasOption("matrix")) {
 				job.setMatrix(line.getOptionValue("matrix"));
-				job.addCommand("-matrix " + line.getOptionValue("matrix"));
+				job.append("-matrix " + line.getOptionValue("matrix"));
 				job.setCommandline(job.getCommand());
 			}
 			
 			if(line.hasOption("seg")) {
 				try {
 					job.setSEGFilter(line.getOptionValue("seg"));
-					job.addCommand("-seg " + line.getOptionValue("seg"));
+					job.append("-seg " + line.getOptionValue("seg"));
 					job.setCommandline(job.getCommand());
 				} catch (Exception e){
 					System.out.println("seg argument failed. Reason: " + e.getMessage());
@@ -533,7 +530,7 @@ public class CLIController {
 			
 			if(line.hasOption("lcase_masking")) {
 				job.setLowerCaseFilter(true);
-				job.addCommand("-lcase_masking ");
+				job.append("-lcase_masking ");
 			}
 		}catch(ParseException exp) {
 			System.err.println("Parsing failed. Reason: " + exp.getMessage());
@@ -547,20 +544,17 @@ public class CLIController {
 			CommandLine line = parser.parse(options, theArgs);			
 
 			if(line.hasOption("query")) {
-				try {
-					job.setFastaFile(line.getOptionValue("query"));
-					job.addCommand("-query " + line.getOptionValue("query"));
-					job.setCommandline(job.getCommand());
-				} catch (RemoteFileSystemException e) {
-					System.out.println("Invalid argument for query");
-					System.exit(1);
-				}
+				setQuery(line, "query");
 			} 
+			
+			if(line.hasOption("i")) {
+				setQuery(line, "i");
+			}
 			
 			if(line.hasOption("query_loc")) {
 				try {
 					job.setQueryLocation(line.getOptionValue("query_loc"));
-					job.addCommand("-query_loc " + line.getOptionValue("query_loc"));
+					job.append("-query_loc " + line.getOptionValue("query_loc"));
 					job.setCommandline(job.getCommand());
 				} catch (NumberFormatException e) {
 					System.out.println("query_loc option failed. Reason:" 
@@ -575,7 +569,7 @@ public class CLIController {
 				
 				try {
 					job.setGeneticCode(line.getOptionValue("query_gencode"));
-					job.addCommand("-query_gencode " + line.getOptionValue("query_gencode"));
+					job.append("-query_gencode " + line.getOptionValue("query_gencode"));
 					job.setCommandline(job.getCommand());
 				} catch(NumberFormatException e) {
 					System.out.println("query_gencode value must be integer");
@@ -599,7 +593,7 @@ public class CLIController {
 					System.exit(1);
 				}
 				
-				job.addCommand("-evalue " + line.getOptionValue("evalue"));
+				job.append("-evalue " + line.getOptionValue("evalue"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -618,7 +612,7 @@ public class CLIController {
 					System.exit(1);
 				}
 				
-				job.addCommand("-word_size " + line.getOptionValue("word_size"));
+				job.append("-word_size " + line.getOptionValue("word_size"));
 				job.setCommandline(job.getCommand());
 			}
 
@@ -632,7 +626,7 @@ public class CLIController {
 							"should be in integer format");
 					System.exit(1);
 				}
-				job.addCommand("-gapopen " + line.getOptionValue("gapopen"));
+				job.append("-gapopen " + line.getOptionValue("gapopen"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -646,13 +640,13 @@ public class CLIController {
 							"should be in integer format");
 					System.exit(1);
 				}
-				job.addCommand("-gapextend " + line.getOptionValue("gapextend"));
+				job.append("-gapextend " + line.getOptionValue("gapextend"));
 				job.setCommandline(job.getCommand());
 			}
 			
 			if(line.hasOption("matrix")) {
 				job.setMatrix(line.getOptionValue("matrix"));
-				job.addCommand("-matrix " + line.getOptionValue("matrix"));
+				job.append("-matrix " + line.getOptionValue("matrix"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -668,7 +662,7 @@ public class CLIController {
 			if(line.hasOption("seg")) {
 				try {
 					job.setSEGFilter(line.getOptionValue("seg"));
-					job.addCommand("-seg " + line.getOptionValue("seg"));
+					job.append("-seg " + line.getOptionValue("seg"));
 					job.setCommandline(job.getCommand());
 				} catch (Exception e){
 					System.out.println("seg argument failed. Reason: " + e.getMessage());
@@ -686,7 +680,7 @@ public class CLIController {
 			
 			if(line.hasOption("lcase_masking")) {
 				job.setLowerCaseFilter(true);
-				job.addCommand("-lcase_masking ");
+				job.append("-lcase_masking ");
 			}
 		}catch(ParseException exp) {
 			System.err.println("Parsing failed. Reason: " + exp.getMessage());
@@ -700,20 +694,17 @@ public class CLIController {
 			CommandLine line = parser.parse(options, theArgs);			
 
 			if(line.hasOption("query")) {
-				try {
-					job.setFastaFile(line.getOptionValue("query"));
-					job.addCommand("-query " + line.getOptionValue("query"));
-					job.setCommandline(job.getCommand());
-				} catch (RemoteFileSystemException e) {
-					System.out.println("Invalid argument for query");
-					System.exit(1);
-				}
+				setQuery(line, "query");
 			} 
+			
+			if(line.hasOption("i")) {
+				setQuery(line, "i");
+			}
 			
 			if(line.hasOption("query_loc")) {
 				try {
 					job.setQueryLocation(line.getOptionValue("query_loc"));
-					job.addCommand("-query_loc " + line.getOptionValue("query_loc"));
+					job.append("-query_loc " + line.getOptionValue("query_loc"));
 					job.setCommandline(job.getCommand());
 				} catch (NumberFormatException e) {
 					System.out.println("query_loc option failed. Reason:" 
@@ -728,7 +719,7 @@ public class CLIController {
 				
 				try {
 					job.setGeneticCode(line.getOptionValue("query_gencode"));
-					job.addCommand("-query_gencode " + line.getOptionValue("query_gencode"));
+					job.append("-query_gencode " + line.getOptionValue("query_gencode"));
 					job.setCommandline(job.getCommand());
 				} catch(NumberFormatException e) {
 					System.out.println("query_gencode value must be integer");
@@ -752,7 +743,7 @@ public class CLIController {
 					System.exit(1);
 				}
 				
-				job.addCommand("-evalue " + line.getOptionValue("evalue"));
+				job.append("-evalue " + line.getOptionValue("evalue"));
 				job.setCommandline(job.getCommand());
 			}
 			
@@ -771,20 +762,20 @@ public class CLIController {
 					System.exit(1);
 				}
 				
-				job.addCommand("-word_size " + line.getOptionValue("word_size"));
+				job.append("-word_size " + line.getOptionValue("word_size"));
 				job.setCommandline(job.getCommand());
 			}
 
 			if(line.hasOption("matrix")) {
 				job.setMatrix(line.getOptionValue("matrix"));
-				job.addCommand("-matrix " + line.getOptionValue("matrix"));
+				job.append("-matrix " + line.getOptionValue("matrix"));
 				job.setCommandline(job.getCommand());
 			}
 			
 			if(line.hasOption("seg")) {
 				try {
 					job.setSEGFilter(line.getOptionValue("seg"));
-					job.addCommand("-seg " + line.getOptionValue("seg"));
+					job.append("-seg " + line.getOptionValue("seg"));
 					job.setCommandline(job.getCommand());
 				} catch (Exception e){
 					System.out.println("seg argument failed. Reason: " + e.getMessage());
@@ -802,10 +793,21 @@ public class CLIController {
 			
 			if(line.hasOption("lcase_masking")) {
 				job.setLowerCaseFilter(true);
-				job.addCommand("-lcase_masking ");
+				job.append("-lcase_masking ");
 			}
 		}catch(ParseException exp) {
 			System.err.println("Parsing failed. Reason: " + exp.getMessage());
+		}
+	}
+	
+	public void setQuery(CommandLine line, String theOption) {
+		try {
+			job.setFastaFile(line.getOptionValue(theOption));
+			job.append("-i " + line.getOptionValue(theOption));
+			job.setCommandline(job.getCommand());
+		} catch (RemoteFileSystemException e) {
+			System.out.println("Invalid argument for query");
+			//System.exit(1);
 		}
 	}
 	

@@ -33,8 +33,10 @@ public class BlastJobCLI extends AbstractBlastJob {
 		pcs.firePropertyChange("commandline", old, this.commandline);		
 	}
 	
-	public void addCommand(String commandline) {
-		this.commandline = this.commandline + commandline;
+	public void append(String commandline) {
+		String old = this.commandline;
+		this.commandline = old + commandline;
+		pcs.firePropertyChange("commandline", old, this.commandline);
 	}
 	
 	public String getCommand() {

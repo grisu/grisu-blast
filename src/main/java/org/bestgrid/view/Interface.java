@@ -54,6 +54,7 @@ public class Interface {
 		
 		try {
 			System.out.println("Creating job on backend...");
+			System.out.println(jobControl.getJobObject().getCommandline());
 			//job.createJob("/ARCS/LocalAccounts/CanterburyHPC");
 			theJob.createJob();
 		} catch (JobPropertiesException e) {
