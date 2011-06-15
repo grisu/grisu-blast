@@ -31,7 +31,7 @@ public abstract class AbstractBlastJob {
 
 	private final Map<String, String> inputFiles = new HashMap<String, String>();
 
-	private FileManager fm;
+	protected FileManager fm;
 	
 	protected void addInputFile(String url) {
 		addInputFile(url, null);

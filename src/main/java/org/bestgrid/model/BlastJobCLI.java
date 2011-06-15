@@ -22,7 +22,7 @@ public class BlastJobCLI extends AbstractBlastJob {
 	private boolean softMask;
 	private boolean lCaseMask;
 	
-	private String input;
+	private String input = null;
 	
 	@Override
 	public String getCommandline() {
@@ -99,7 +99,7 @@ public class BlastJobCLI extends AbstractBlastJob {
 		} else throw new Exception("invalid seg argument");
 	}
 	
-	public void setSoftMasking(String boolValue) throws Exception{
+	public void setSoftMasking(String boolValue) throws Exception {
 		//check if boolean
 		if(boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("false")) {
 			this.softMask = Boolean.parseBoolean(boolValue);
@@ -114,6 +114,9 @@ public class BlastJobCLI extends AbstractBlastJob {
 		 this.input = input;
 	 }
 	
+	 public String getInput() {
+		 return this.input;
+	 }
 	/*
 	public void ifInteger(String toCheck) throws NumberFormatException {
 		Integer.parseInt(toCheck);

@@ -819,4 +819,13 @@ public class CLIController {
 		job.setServiceInterface(si);
 	}
 	
+	public void setSubmission() {
+		if(job.getInput() != null) {
+			try {
+				job.setFastaFile(job.getInput());
+			} catch(RemoteFileSystemException Rfse) {
+				System.out.println(Rfse.getMessage());
+			}
+		}
+	}
 }
