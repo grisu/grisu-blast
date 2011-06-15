@@ -801,14 +801,12 @@ public class CLIController {
 	}
 	
 	public void setQuery(CommandLine line, String theOption) {
-		try {
-			job.setFastaFile(line.getOptionValue(theOption));
-			job.append("-i " + line.getOptionValue(theOption));
-			job.setCommandline(job.getCommand());
-		} catch (RemoteFileSystemException e) {
-			System.out.println("Invalid argument for query");
-			//System.exit(1);
-		}
+		System.out.println("setQuery: " + line.getOptionValue(theOption));
+		
+		job.setInput(line.getOptionValue(theOption));
+		job.append("-i " + line.getOptionValue(theOption));
+		job.setCommandline(job.getCommand());
+		
 	}
 	
 	public ServiceInterface getServiceInterface() {
@@ -817,8 +815,8 @@ public class CLIController {
 	
 	public void setServiceInterface(ServiceInterface si) {
 		this.si = si;
-		this.fm = GrisuRegistryManager.getDefault(si).getFileManager();
-		job.setServiceInterface(this.si);
+		//this.fm = GrisuRegistryManager.getDefault(si).getFileManager();
+		job.setServiceInterface(si);
 	}
 	
 }

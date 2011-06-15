@@ -42,7 +42,7 @@ public class Interface {
 			System.exit(1);
 		}
 
-		jobControl.setServiceInterface(si);
+		//jobControl.setServiceInterface(si);
 		//jobControl.createJob();
 		
 		System.out.println("Creating job...");

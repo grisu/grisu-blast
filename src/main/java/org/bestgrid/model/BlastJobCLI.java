@@ -22,6 +22,8 @@ public class BlastJobCLI extends AbstractBlastJob {
 	private boolean softMask;
 	private boolean lCaseMask;
 	
+	private String input;
+	
 	@Override
 	public String getCommandline() {
 		return commandline;
@@ -107,6 +109,10 @@ public class BlastJobCLI extends AbstractBlastJob {
 	public void setLowerCaseFilter(boolean isEnabled) {
 		this.lCaseMask = isEnabled;
 	}
+	
+	 public void setInput(String input) {
+		 this.input = input;
+	 }
 	
 	/*
 	public void ifInteger(String toCheck) throws NumberFormatException {

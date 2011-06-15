@@ -137,7 +137,7 @@ public abstract class AbstractBlastJob {
 	}
 
 	public void setFastaFile(String value) throws RemoteFileSystemException {
-
+		//System.out.println("SetFastaFile: " + value);
 		GridFile file = fm.createGridFile(value);
 		setFastaFile(file);
 	}
