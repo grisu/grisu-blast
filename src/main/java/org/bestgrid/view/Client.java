@@ -1,15 +1,14 @@
 package org.bestgrid.view;
 
-import java.util.Scanner;
-
 import grisu.control.ServiceInterface;
 import grisu.control.exceptions.JobPropertiesException;
 import grisu.control.exceptions.JobSubmissionException;
 import grisu.frontend.control.login.LoginManager;
 import grisu.frontend.model.job.JobObject;
 import grisu.jcommons.constants.Constants;
-//import grisu.model.FileManager;
-import org.apache.commons.cli.*;
+
+import java.util.Scanner;
+
 import org.bestgrid.model.BlastJobCLI;
 
 public class Client {
@@ -19,22 +18,22 @@ public class Client {
 		System.out.println("Logging in...");
 		ServiceInterface si = null;
 		try {
-			si = LoginManager.loginCommandline("BeSTGRID-DEV");
+			si = LoginManager.loginCommandline("BeSTGRID");
 		} catch (Exception e) {
 			System.err.println("Could not login: " + e.getLocalizedMessage());
 			System.exit(1);
 		}
 
 		System.out.println("Creating job...");
-		
+
 		BlastJobCLI job = new BlastJobCLI();
-		
+
 		//getting arguments for job specification
 		int cpu = 3;
 		String submitLoc = "dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler";
 		String vo = "/ARCS/LocalAccounts/CanterburyHPC";
-		
-		if(args != null || args.length != 0) {
+
+		if((args != null) || (args.length != 0)) {
 			for (int i = 0; i < args.length; i++) {
 				if(args[i] == "cpu") {
 					cpu = Integer.parseInt(args[i+1]);
@@ -44,7 +43,7 @@ public class Client {
 					submitLoc = args[i+1];
 				}
 				System.out.print(args[i]);
-			} 
+			}
 			job.setServiceInterface(si);
 			job.setCpus(cpu);
 			job.setVo(vo);
@@ -55,7 +54,7 @@ public class Client {
 			job.setVo(vo);
 			job.setSubmissionLocation(submitLoc);
 		}
-		
+
 		Scanner input = new Scanner(System.in);
 		System.out.println("enter blast command");
 		String command = input.nextLine();
@@ -63,7 +62,7 @@ public class Client {
 
 		JobObject theJob = job.createJobObject();
 
-		
+
 		// theJob.setApplication("UnixCommands");
 		try {
 			System.out.println("Creating job on backend...");
@@ -93,7 +92,7 @@ public class Client {
 		System.out.println("Job submitted to: "
 				+ theJob.getJobProperty(Constants.SUBMISSION_SITE_KEY));
 		/*+ job.getJobProperty(Constants.SUBMISSION_SITE_KEY));*/
-		
+
 		System.out.println("Waiting for job to finish...");
 
 		// for a realy workflow, don't check every 5 seconds since that would
@@ -112,7 +111,7 @@ public class Client {
 		// executors running in the background
 		// and they need to know when to shutdown.
 		// Otherwise, your application might not exit.
-		
+
 		System.exit(0);
 
 	}
