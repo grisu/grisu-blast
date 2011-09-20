@@ -25,6 +25,6 @@ public class Interface {
 		
     	final BlastModel myModel = new BlastModel();
     	final BlastView myView = new BlastView();
-    	BlastController myController = new BlastController(myModel, myView);
+    	BlastController myController = new BlastController(myModel, myView, si);
     }
 }
