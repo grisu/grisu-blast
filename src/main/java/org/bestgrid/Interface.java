@@ -13,7 +13,7 @@ import org.bestgrid.model.BlastModel;
 import org.bestgrid.control.BlastController;
 
 public class Interface {
-    public static void main(String a[]) {
+    public static void main(String args[]) {
     	System.out.println("Logging in...");
 		ServiceInterface si = null;
 		try {
@@ -24,7 +24,8 @@ public class Interface {
 		}
 		
     	final BlastModel myModel = new BlastModel();
+    	myModel.setServiceInterface(si);
     	final BlastView myView = new BlastView();
-    	BlastController myController = new BlastController(myModel, myView, si);
+    	BlastController myController = new BlastController(myModel, myView, args);
     }
 }

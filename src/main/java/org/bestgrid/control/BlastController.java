@@ -15,10 +15,10 @@ import org.bestgrid.view.BlastView;
 public class BlastController {	
 	private ServiceInterface si;
 	
-	public BlastController(final BlastModel myModel, final BlastView myView, ServiceInterface si) {
-				while(true) {
+	public BlastController(final BlastModel myModel, final BlastView myView, String[] aCommand) {
+		myModel.setModel(aCommand);	
+			while(true) {
 					try {
-						this.si = si;
 						//getting the command from command line
 						BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 						String line = reader.readLine();
@@ -46,10 +46,18 @@ public class BlastController {
 					}
 				}
 		}
-	 
+
+	public ServiceInterface getServiceInterface() {
+		return this.si;
+	}
+	
+	public void setServiceInterface(ServiceInterface si) {
+		this.si = si;
+	}
+	
 	private void submit(BlastModel myModel) {
 		System.out.println("Creating job...");
-		myModel.setServiceInterface(this.si);
+		//myModel.setServiceInterface(this.si);
 		myModel.setCommandline();
 		JobObject job = myModel.createJobObject();
 		job.setSubmissionLocation("grid_linux:ng2hpc.canterbury.ac.nz#Loadleveler");

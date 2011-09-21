@@ -61,7 +61,7 @@ public class BlastModel extends AbstractBlastJob{
 			}
 			
 			if(line.hasOption("i")) {
-				setFastaFile(line.getOptionValue("i"));
+				addInputFile(line.getOptionValue("i"));
 			}
 			
 			if(line.hasOption("p")) {
@@ -100,7 +100,7 @@ public class BlastModel extends AbstractBlastJob{
 	private void setDatabase(String db) {
 		this.db = db;
 	}
-	
+	/*
 	public void setFastaFile(String file) {
 		
 		this.filename = FileManager.getFilename(file);
@@ -112,8 +112,8 @@ public class BlastModel extends AbstractBlastJob{
 		this.fastaFile = inputFile;
 		inputFiles.put(inputFile.getUrl(), null);
 		pcs.firePropertyChange("fastaFile", old, this.fastaFile);
-		pcs.firePropertyChange("inputFiles", null, inputFiles);*/
-	}
+		pcs.firePropertyChange("inputFiles", null, inputFiles);
+	}*/
 	@Override
 	public String getCommandline() {
 		return commandline;
