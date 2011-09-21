@@ -77,6 +77,7 @@ public class BlastController {
 		} catch (JobSubmissionException e) {
 			System.err.println("Could not submit job: "
 					+ e.getLocalizedMessage());
+			e.printStackTrace();
 			System.exit(1);
 		} catch (InterruptedException e) {
 			System.err.println("Jobsubmission interrupted: "
