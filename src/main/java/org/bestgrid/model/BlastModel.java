@@ -1,5 +1,7 @@
 package org.bestgrid.model;
 
+import java.util.Iterator;
+
 import grisu.control.ServiceInterface;
 import grisu.frontend.model.job.JobObject;
 import grisu.model.dto.GridFile;
@@ -25,24 +27,34 @@ public class BlastModel extends AbstractBlastJob{
 	
 	public void setCommandline() {		
 		String old = this.commandline;
-		String commandline = null;
+		String append;
 		
 		if(db != null) {
-			commandline = " -d " + getDatabase();
-			this.commandline = old + commandline;
+			System.out.println("setting commandline -d " + getDatabase());
+			old = this.commandline;
+			append = " -d " + getDatabase();
+			this.commandline = old + append;
 		}
 		
 		if(blast != null) {
-			commandline = " -p " + getBlast();
-			this.commandline = old + commandline;
+			System.out.println("setting commandline -p " + getBlast());
+			old = this.commandline;
+			append = " -p " + getBlast();
+			this.commandline = old + append;
 		}
 		
-		if(filename != null) {
-			commandline = " -i " + getFastaFile().getName();
-			this.commandline = old + commandline;
+		if(getInputFiles().isEmpty() == false) {
+			Iterator iterator = getInputFiles().keySet().iterator();
+			while (iterator.hasNext()) {
+				String value = getInputFiles().toString();
+				System.out.println("setting commandline -i " + value);
+				old = this.commandline;
+				append = " -i " + value;
+				this.commandline = old + append;
+			}
 		}
 		
-		this.commandline = commandline;
+		//this.commandline = commandline;
 		pcs.firePropertyChange("commandline", old, this.commandline);		
 	}
 	
@@ -58,14 +70,17 @@ public class BlastModel extends AbstractBlastJob{
 
 			if(line.hasOption("d")) {
 				setDatabase(line.getOptionValue("d"));
+				System.out.println("argument -d " + line.getOptionValue("d"));
 			}
 			
 			if(line.hasOption("i")) {
 				addInputFile(line.getOptionValue("i"));
+				System.out.println("argument -i " + line.getOptionValue("i"));
 			}
 			
 			if(line.hasOption("p")) {
 				setBlast(line.getOptionValue("p"));
+				System.out.println("argument -p " + line.getOptionValue("p"));
 			}
 			
 		} catch (Exception e) {
@@ -94,7 +109,7 @@ public class BlastModel extends AbstractBlastJob{
 	}
 	
 	private void setBlast(String type) {
-		blast = type;
+		this.blast = type;
 	}
 	
 	private void setDatabase(String db) {

@@ -26,8 +26,13 @@ public class BlastController {
 						
 						//send commands to the model
 						myModel.setModel(command);
+						myModel.setCommandline();
 						myView.setView(myModel.getModel());
 
+						if (line.equals("showcommand")) {
+							System.out.println(myModel.getCommandline());
+						}
+						
 						if (line.equals("submit")) {
 							submit(myModel);
 							break;

@@ -60,7 +60,7 @@ public abstract class AbstractBlastJob {
 		blastJob.setApplication("mpiBLAST");
 		//blastJob.setForce_mpi(true);
 
-		blastJob.setCommandline(getCommandline());
+		blastJob.setCommandline("mpiblast " + getCommandline());
 
 		// input files
 		for (String url : getInputFiles().keySet()) {
