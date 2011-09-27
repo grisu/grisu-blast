@@ -1,13 +1,8 @@
 package org.bestgrid;
 
 import grisu.control.ServiceInterface;
-import grisu.control.exceptions.JobPropertiesException;
-import grisu.control.exceptions.JobSubmissionException;
 import grisu.frontend.control.login.LoginManager;
-import grisu.frontend.model.job.JobObject;
-import grisu.jcommons.constants.Constants;
 
-import org.apache.commons.cli.Options;
 import org.bestgrid.view.BlastView;
 import org.bestgrid.model.BlastModel;
 import org.bestgrid.control.BlastController;
@@ -26,6 +21,7 @@ public class Interface {
     	final BlastModel myModel = new BlastModel();
     	myModel.setServiceInterface(si);
     	final BlastView myView = new BlastView();
-    	BlastController myController = new BlastController(myModel, myView, args);
+    	@SuppressWarnings("unused")
+		BlastController myController = new BlastController(myModel, myView, args);
     }
 }

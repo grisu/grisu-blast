@@ -5,7 +5,7 @@ import grisu.control.exceptions.JobPropertiesException;
 import grisu.control.exceptions.JobSubmissionException;
 import grisu.frontend.model.job.JobObject;
 import grisu.jcommons.constants.Constants;
-import grisu.model.GrisuRegistryManager;
+//import grisu.model.GrisuRegistryManager;
 
 import java.io.*;
 
@@ -26,7 +26,7 @@ public class BlastController {
 						
 						//send commands to the model
 						myModel.setModel(command);
-						myModel.setCommandline();
+						//myModel.setCommandline();
 						myView.setView(myModel.getModel());
 
 						if (line.equals("showcommand")) {
@@ -70,6 +70,7 @@ public class BlastController {
 		try {
 			System.out.println("Creating job on backend...");
 			job.createJob("/ARCS/BeSTGRID");
+			System.out.println(job.getCommandline());
 		} catch (JobPropertiesException e) {
 			System.err.println("Could not create job: "
 					+ e.getLocalizedMessage());

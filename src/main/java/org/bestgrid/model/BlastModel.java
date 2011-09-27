@@ -1,23 +1,20 @@
 package org.bestgrid.model;
 
-import java.util.Iterator;
+import grisu.control.exceptions.RemoteFileSystemException;
 
-import grisu.control.ServiceInterface;
-import grisu.frontend.model.job.JobObject;
-import grisu.model.dto.GridFile;
-import grisu.model.FileManager;
+//import java.util.Iterator;
 
 import org.apache.commons.cli.*;
 
 public class BlastModel extends AbstractBlastJob{
-	private double accumulator, opr; 
-	private char op;
+	//private double accumulator, opr; 
+	//private char op;
 	
 	private String db = null;
 	private String blast = null;
-	private String filename = null;
+	//private String filename = null;
 	
-	private String commandline;
+	private String commandline = "";
 	
 	public BlastModel() { 
 		
@@ -43,7 +40,21 @@ public class BlastModel extends AbstractBlastJob{
 			this.commandline = old + append;
 		}
 		
+		try {
+			if(fm.fileExists(getFastaFile())) {
+				System.out.println("setting commandline -i " + getFastaFile().getName());
+				old = this.commandline;
+				append = " -i " + getFastaFile().getName();
+				this.commandline = old + append;
+			}
+		}
+		catch (RemoteFileSystemException rfse) {
+			System.out.println(rfse.getMessage());
+			rfse.printStackTrace();
+		}
+		/*
 		if(getInputFiles().isEmpty() == false) {
+			@SuppressWarnings("rawtypes")
 			Iterator iterator = getInputFiles().keySet().iterator();
 			while (iterator.hasNext()) {
 				String value = getInputFiles().toString();
@@ -52,7 +63,7 @@ public class BlastModel extends AbstractBlastJob{
 				append = " -i " + value;
 				this.commandline = old + append;
 			}
-		}
+		}*/
 		
 		//this.commandline = commandline;
 		pcs.firePropertyChange("commandline", old, this.commandline);		
@@ -74,7 +85,8 @@ public class BlastModel extends AbstractBlastJob{
 			}
 			
 			if(line.hasOption("i")) {
-				addInputFile(line.getOptionValue("i"));
+				//addInputFile(line.getOptionValue("i"));
+				setFastaFile(line.getOptionValue("i"));
 				System.out.println("argument -i " + line.getOptionValue("i"));
 			}
 			
@@ -88,7 +100,7 @@ public class BlastModel extends AbstractBlastJob{
 		}			
 	}
 	
-	public String getModel() { return accumulator+""; }
+	public String getModel() { return /*accumulator+"";*/ blast; }
 	
 	private Options getOptions() {
 		Options opt = new Options();  
