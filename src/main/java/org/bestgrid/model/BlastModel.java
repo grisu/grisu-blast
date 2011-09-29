@@ -12,9 +12,10 @@ public class BlastModel extends AbstractBlastJob{
 	
 	private String db = null;
 	private String blast = null;
+	private String output = null;
 	//private String filename = null;
 	
-	private String commandline = "";
+	private String commandline;
 	
 	public BlastModel() { 
 		
@@ -22,7 +23,8 @@ public class BlastModel extends AbstractBlastJob{
 		
 	} 
 	
-	public void setCommandline() {		
+	public void constructCommand() {		
+		commandline ="";
 		String old = this.commandline;
 		String append;
 		
@@ -44,7 +46,7 @@ public class BlastModel extends AbstractBlastJob{
 			if(fm.fileExists(getFastaFile())) {
 				System.out.println("setting commandline -i " + getFastaFile().getName());
 				old = this.commandline;
-				append = " -i " + getFastaFile().getName();
+				append = " -o " + getOutput();
 				this.commandline = old + append;
 			}
 		}
@@ -52,20 +54,14 @@ public class BlastModel extends AbstractBlastJob{
 			System.out.println(rfse.getMessage());
 			rfse.printStackTrace();
 		}
-		/*
-		if(getInputFiles().isEmpty() == false) {
-			@SuppressWarnings("rawtypes")
-			Iterator iterator = getInputFiles().keySet().iterator();
-			while (iterator.hasNext()) {
-				String value = getInputFiles().toString();
-				System.out.println("setting commandline -i " + value);
-				old = this.commandline;
-				append = " -i " + value;
-				this.commandline = old + append;
-			}
-		}*/
 		
-		//this.commandline = commandline;
+		if(output != null) {
+			System.out.println("setting commandline -o " + getOutput());
+			old = this.commandline;
+			append = " -i " + getFastaFile().getName();
+			this.commandline = old + append;
+		}
+
 		pcs.firePropertyChange("commandline", old, this.commandline);		
 	}
 	
@@ -85,7 +81,6 @@ public class BlastModel extends AbstractBlastJob{
 			}
 			
 			if(line.hasOption("i")) {
-				//addInputFile(line.getOptionValue("i"));
 				setFastaFile(line.getOptionValue("i"));
 				System.out.println("argument -i " + line.getOptionValue("i"));
 			}
@@ -93,6 +88,12 @@ public class BlastModel extends AbstractBlastJob{
 			if(line.hasOption("p")) {
 				setBlast(line.getOptionValue("p"));
 				System.out.println("argument -p " + line.getOptionValue("p"));
+
+			}
+			
+			if(line.hasOption("o")) {
+				System.out.println("argument -o " + line.getOptionValue("o"));
+				setOutput(line.getOptionValue("o"));
 			}
 			
 		} catch (Exception e) {
@@ -100,7 +101,7 @@ public class BlastModel extends AbstractBlastJob{
 		}			
 	}
 	
-	public String getModel() { return /*accumulator+"";*/ blast; }
+	public String getModel() { return blast; }
 	
 	private Options getOptions() {
 		Options opt = new Options();  
@@ -108,6 +109,7 @@ public class BlastModel extends AbstractBlastJob{
 		opt.addOption("d", true, "the database to use");
 		opt.addOption("i", true, "query file");
 		opt.addOption("p", true, "blast program name");
+		opt.addOption("o", true, "the output file");
 
 		return opt;
 	}
@@ -120,6 +122,10 @@ public class BlastModel extends AbstractBlastJob{
 		return db;
 	}
 	
+	private String getOutput() {
+		return output;
+	}
+	
 	private void setBlast(String type) {
 		this.blast = type;
 	}
@@ -127,20 +133,11 @@ public class BlastModel extends AbstractBlastJob{
 	private void setDatabase(String db) {
 		this.db = db;
 	}
-	/*
-	public void setFastaFile(String file) {
-		
-		this.filename = FileManager.getFilename(file);
-		this.addInputFile(file);
-		
-		/*
-		GridFile old = this.fastaFile;
-		inputFiles.remove(inputFile.getUrl());
-		this.fastaFile = inputFile;
-		inputFiles.put(inputFile.getUrl(), null);
-		pcs.firePropertyChange("fastaFile", old, this.fastaFile);
-		pcs.firePropertyChange("inputFiles", null, inputFiles);
-	}*/
+	
+	private void setOutput(String fileName) {
+		this.output = fileName;
+	}
+	
 	@Override
 	public String getCommandline() {
 		return commandline;

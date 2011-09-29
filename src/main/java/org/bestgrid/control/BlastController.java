@@ -26,10 +26,10 @@ public class BlastController {
 						
 						//send commands to the model
 						myModel.setModel(command);
-						//myModel.setCommandline();
 						myView.setView(myModel.getModel());
 
 						if (line.equals("showcommand")) {
+							myModel.constructCommand();
 							System.out.println(myModel.getCommandline());
 						}
 						
@@ -63,7 +63,7 @@ public class BlastController {
 	private void submit(BlastModel myModel) {
 		System.out.println("Creating job...");
 		//myModel.setServiceInterface(this.si);
-		myModel.setCommandline();
+		myModel.constructCommand();
 		JobObject job = myModel.createJobObject();
 		job.setSubmissionLocation("grid_linux:ng2hpc.canterbury.ac.nz#Loadleveler");
 		
@@ -91,6 +91,8 @@ public class BlastController {
 			System.exit(1);
 		}
 		
+		System.out.println(job.getJobDirectoryUrl());
+		
 		System.out.println("Job submission finished.");
 		System.out.println("Job submitted to: "
 				+ job.getJobProperty(Constants.SUBMISSION_SITE_KEY));
@@ -104,6 +106,8 @@ public class BlastController {
 		System.out.println("Job finished with status: "
 				+ job.getStatusString(false));
 
+		job.downloadAndCacheOutputFile(job.getJobDirectoryUrl());
+		
 		System.out.println("Stdout: " + job.getStdOutContent());
 		System.out.println("Stderr: " + job.getStdErrContent());
 
