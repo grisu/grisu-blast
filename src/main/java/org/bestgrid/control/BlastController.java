@@ -3,6 +3,7 @@ package org.bestgrid.control;
 import grisu.control.ServiceInterface;
 import grisu.control.exceptions.JobPropertiesException;
 import grisu.control.exceptions.JobSubmissionException;
+import grisu.control.exceptions.NoSuchJobException;
 import grisu.frontend.model.job.JobObject;
 import grisu.jcommons.constants.Constants;
 //import grisu.model.GrisuRegistryManager;
@@ -106,7 +107,19 @@ public class BlastController {
 		System.out.println("Job finished with status: "
 				+ job.getStatusString(false));
 
-		job.downloadAndCacheOutputFile(job.getJobDirectoryUrl());
+		//job.downloadAndCacheOutputFile(job.getJobDirectoryUrl());
+		
+		//Retrieving the output directory
+		if(job.isFinished()) {
+			try {
+				JobObject toRetrieve = new JobObject(job.getServiceInterface(), job.getJobname());
+				toRetrieve.downloadAndCacheOutputFile(toRetrieve.getJobDirectoryUrl()); 
+				}
+			catch (NoSuchJobException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+				}
+		}
 		
 		System.out.println("Stdout: " + job.getStdOutContent());
 		System.out.println("Stderr: " + job.getStdErrContent());
