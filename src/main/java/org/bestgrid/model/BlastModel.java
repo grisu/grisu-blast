@@ -1,6 +1,8 @@
 package org.bestgrid.model;
 
+import grisu.control.exceptions.NoSuchJobException;
 import grisu.control.exceptions.RemoteFileSystemException;
+import grisu.frontend.model.job.JobObject;
 
 //import java.util.Iterator;
 
@@ -46,7 +48,7 @@ public class BlastModel extends AbstractBlastJob{
 			if(fm.fileExists(getFastaFile())) {
 				System.out.println("setting commandline -i " + getFastaFile().getName());
 				old = this.commandline;
-				append = " -o " + getOutput();
+				append = " -i " + getFastaFile().getName();
 				this.commandline = old + append;
 			}
 		}
@@ -58,11 +60,26 @@ public class BlastModel extends AbstractBlastJob{
 		if(output != null) {
 			System.out.println("setting commandline -o " + getOutput());
 			old = this.commandline;
-			append = " -i " + getFastaFile().getName();
+			append = " -o " + this.output;
 			this.commandline = old + append;
 		}
 
 		pcs.firePropertyChange("commandline", old, this.commandline);		
+	}
+	
+	public void constructProperties(JobObject jo) throws NoSuchJobException {
+		if(db != null) {
+			jo.getServiceInterface().addJobProperty(jo.getJobname(), "DATABASE_KEY", db);
+		}
+		
+		if(blast != null) {
+			jo.getServiceInterface().addJobProperty(jo.getJobname(), "APPLICATION_KEY", blast);
+		}
+		
+		if(output != null) {
+			jo.getServiceInterface().addJobProperty(jo.getJobname(), "OUTPUT_FILE_KEY", output);
+		}
+		
 	}
 	
 	public void setModel(String[] c) { 
