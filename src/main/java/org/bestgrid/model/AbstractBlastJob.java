@@ -58,10 +58,12 @@ public abstract class AbstractBlastJob {
 		blastJob.setSubmissionLocation(getSubmissionLocation());
 		// TODO maybe we need to switch between blast and mpiblast here?
 		blastJob.setApplication("mpiBLAST");
+		//blastJob.setApplication("UnixCommands"); //changed while BlueFern is down
 		//blastJob.setForce_mpi(true);
 
 		blastJob.setCommandline("mpiblast " + getCommandline());
-
+		//blastJob.setCommandline("echo mpiblast " + getCommandline());
+		
 		// input files
 		for (String url : getInputFiles().keySet()) {
 			blastJob.addInputFileUrl(url, getInputFiles().get(url));

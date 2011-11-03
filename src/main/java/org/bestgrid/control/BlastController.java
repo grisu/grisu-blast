@@ -68,11 +68,14 @@ public class BlastController {
 		//myModel.setServiceInterface(this.si);
 		myModel.constructCommand();
 		JobObject job = myModel.createJobObject();
-		job.setSubmissionLocation("grid_linux:ng2hpc.canterbury.ac.nz#Loadleveler");
+		//job.setSubmissionLocation("grid_linux:ng1hpc.canterbury.ac.nz#Loadleveler");
+		job.setSubmissionLocation("dev8_1:ng2hpc.canterbury.ac.nz#Loadleveler");
+		//job.setSubmissionLocation("route@er171.ceres.auckland.ac.nz:ng2.auckland.ac.nz"); //changed temporarily while Bluefern is down
 		
 		try {
 			System.out.println("Creating job on backend...");
-			job.createJob("/ARCS/BeSTGRID");
+			//job.createJob("/ARCS/BeSTGRID");
+			job.createJob("/ARCS/LocalAccounts/CanterburyHPC"); //if sending to BlueFern local account
 			System.out.println(job.getCommandline());
 		} catch (JobPropertiesException e) {
 			System.err.println("Could not create job: "
