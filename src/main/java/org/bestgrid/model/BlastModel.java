@@ -181,6 +181,8 @@ public class BlastModel extends AbstractBlastJob{
 		
 		if(output != null) {
 			jo.getServiceInterface().addJobProperty(jo.getJobname(), "OUTPUT_FILE_KEY", output);
+			System.out.println("Adding property OUTPUT_FILE_KEY to " + 
+					jo.getJobname() + " as " + output);
 		}
 		
 		if(start != null && stop != null) {
@@ -314,6 +316,7 @@ public class BlastModel extends AbstractBlastJob{
 		Options opt = new Options();  
 		
 		/* TODO is extension options in the manual correlate to Scoring parameters in UI for blastn*/
+		
 		opt.addOption("d", true, "the database to use");
 		opt.addOption("i", true, "query file");
 		opt.addOption("p", true, "blast program name");
@@ -460,15 +463,15 @@ public class BlastModel extends AbstractBlastJob{
 		return output;
 	}
 	
-	private void setBlast(String type) {
+	public void setBlast(String type) {
 		this.blast = type;
 	}
 	
-	private void setDatabase(String db) {
+	public void setDatabase(String db) {
 		this.db = db;
 	}
 	
-	private void setOutput(String fileName) {
+	public void setOutput(String fileName) {
 		this.output = fileName;
 	}
 	

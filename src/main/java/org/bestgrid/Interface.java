@@ -4,6 +4,7 @@ import grisu.control.ServiceInterface;
 import grisu.frontend.control.login.LoginManager;
 
 import org.bestgrid.view.BlastView;
+import org.bestgrid.view.BlastPanels;
 import org.bestgrid.model.BlastModel;
 import org.bestgrid.control.BlastController;
 
@@ -20,8 +21,10 @@ public class Interface {
 		
     	final BlastModel myModel = new BlastModel();
     	myModel.setServiceInterface(si);
-    	final BlastView myView = new BlastView();
+    	//final BlastView myView = new BlastView();
+    	final BlastPanels myView = new BlastPanels();
     	@SuppressWarnings("unused")
-		BlastController myController = new BlastController(myModel, myView, args);
+		//BlastController myController = new BlastController(myModel, myView, args);
+    	BlastController myController = new BlastController(myModel, myView);
     }
 }
