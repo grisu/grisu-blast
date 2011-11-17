@@ -112,9 +112,6 @@ public class BlastController {
 		System.out.println("Job finished with status: "
 				+ job.getStatusString(false));
 
-		System.out.println("Stdout: " + job.getStdOutContent());
-		System.out.println("Stderr: " + job.getStdErrContent());
-		
 		try {
 			System.out.println("Constructing job properties...");
 			myModel.constructProperties(job);
@@ -122,8 +119,12 @@ public class BlastController {
 			System.out.println(nsje.getMessage());
 			nsje.printStackTrace();
 		}
+		System.out.println("Stdout: " + job.getStdOutContent());
+		System.out.println("Stderr: " + job.getStdErrContent());
 		
-		String url = job.getJobDirectoryUrl() + "/" + job.getJobProperty("OUTPUT_FILE_KEY");
+		System.out.println("Output File: " + job.getJobProperty("OUTPUT_FILE_KEY",true));
+		String url = job.getJobDirectoryUrl() + "/" + job.getJobProperty("OUTPUT_FILE_KEY", true);
+		System.out.println("URL: " + url);
 		File file = job.downloadAndCacheOutputFile(url);
 		try {
 			Desktop.getDesktop().open(file);
