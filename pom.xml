@@ -124,6 +124,11 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>grisu.frontend</groupId>
+			<artifactId>grisu-client-swing</artifactId>
+			<version>${grisu-version}</version>
+		</dependency>
 	</dependencies>
 
 	<issueManagement>
