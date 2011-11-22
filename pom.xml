@@ -198,7 +198,7 @@
 							<archive>
 								<index>true</index>
 								<manifest>
-									<mainClass>org.bestgrid.view.Interface</mainClass>
+									<mainClass>org.bestgrid.MpiBlast</mainClass>
 								</manifest>
 								<manifestEntries>
 									<Class-Path>bcprov.jar bcprov-jdk15-145.jar local-backend.jar
