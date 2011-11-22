@@ -3,16 +3,22 @@ package org.bestgrid;
 import grisu.control.ServiceInterface;
 import grisu.frontend.view.swing.GrisuApplicationWindow;
 import grisu.frontend.view.swing.jobcreation.JobCreationPanel;
+import grisu.frontend.view.swing.jobcreation.widgets.SubmissionLogPanel;
 
+import java.awt.Component;
 import java.awt.EventQueue;
 
-import org.bestgrid.view.BlastPanels;
+import org.bestgrid.view.Viewer;
 
-public class GraphicalInterface extends GrisuApplicationWindow {
+public class MpiBlast extends GrisuApplicationWindow {
 
 	public static String MPI_BLAST_DEFAULT_VERSION = "1.6.0";
 
 	//public final ServiceInterface si;
+	
+	// a ready-made widget that, once connected to a JobObject, tracks the
+	// progress of a job submission...
+	private SubmissionLogPanel submissionLogPanel;
 
 	public static void main(String[] args) {
 
@@ -21,7 +27,7 @@ public class GraphicalInterface extends GrisuApplicationWindow {
 			public void run() {
 				try {
 
-					GrisuApplicationWindow appWindow = new GraphicalInterface();
+					GrisuApplicationWindow appWindow = new MpiBlast();
 					appWindow.setVisible(true);
 
 				} catch (Exception e) {
@@ -33,7 +39,7 @@ public class GraphicalInterface extends GrisuApplicationWindow {
 	}
 
 	// pretty much everything is done for us in the superclass
-	public GraphicalInterface() {
+	public MpiBlast() {
 		super();
 	}
 
@@ -60,15 +66,24 @@ public class GraphicalInterface extends GrisuApplicationWindow {
 	public JobCreationPanel[] getJobCreationPanels() {
 		// only one type of job submission in our case, you can have more though
 		// (e.g. a basic one and an advanced)
-		return new JobCreationPanel[] { new BlastPanels() };
+		return new JobCreationPanel[] { new Viewer(this) };
 	}
 
+	// creating a submission log panel
+	public SubmissionLogPanel getSubmissionLogPanel() {
+		if (submissionLogPanel == null) {
+			submissionLogPanel = new SubmissionLogPanel();
+			submissionLogPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		}
+		return submissionLogPanel;
+	}
+	
 	@Override
 	public String getName() {
 		// if you leave it the way it is, the name of your artifact will be the
 		// title of the java frame of this application. You can hardcode
 		// something different if you like, though.
-		return "grid-blast";
+		return "grisu-blast";
 	}
 
 	@Override
