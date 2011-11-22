@@ -122,12 +122,13 @@ public class BlastController {
 		System.out.println("Stdout: " + job.getStdOutContent());
 		System.out.println("Stderr: " + job.getStdErrContent());
 		
-		System.out.println("Output File: " + job.getJobProperty("OUTPUT_FILE_KEY",true));
+		//System.out.println("Output File: " + job.getJobProperty("OUTPUT_FILE_KEY",true));
 		
-		//printing the content of output file
+		//printing the content of output file. getFileContent uses relative path
 		System.out.println("Output content: " + job.getFileContent(job.getJobProperty("OUTPUT_FILE_KEY", true)));
 		
-		String url = job.getJobDirectoryUrl() + "/" + job.getJobProperty("OUTPUT_FILE_KEY", true);
+		//getting the file. URL is relative the job directory
+		String url = job.getJobProperty("OUTPUT_FILE_KEY", true);
 		System.out.println("URL: " + url);
 		File file = job.downloadAndCacheOutputFile(url);
 		try {

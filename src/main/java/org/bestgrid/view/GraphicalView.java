@@ -1,32 +1,21 @@
 package org.bestgrid.view;
 
-import javax.swing.JPanel;
-
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
-
-import grisu.control.ServiceInterface;
-import grisu.frontend.control.jobMonitoring.RunningJobManager;
-import grisu.frontend.model.job.JobObject;
-import grisu.frontend.view.swing.jobcreation.*;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-
 @SuppressWarnings("serial")
-public class BlastPanels extends JPanel implements JobCreationPanel {
+public class GraphicalView extends JPanel /*implements JobCreationPanel*/ {
 	
 	// the serviceinterface. gets set when the setServiceInterface method is
 	// called. we need it in order to submit the job and do everything else...
-	private ServiceInterface si;
+	//private ServiceInterface si;
 	
 	private JTextField txtFileToUpload;
 	private JTextField txtOutputFileName;
@@ -40,7 +29,7 @@ public class BlastPanels extends JPanel implements JobCreationPanel {
 	/**
 	 * Create the panel.
 	 */
-	public BlastPanels() {
+	public GraphicalView() {
 		
 		setLayout(null);
 		
@@ -193,9 +182,9 @@ public class BlastPanels extends JPanel implements JobCreationPanel {
 	// initialization of your panel (if you need to). E.g. populating a combobox
 	// with a list of submission locations or versions of an application
 	// package...
-	public void setServiceInterface(ServiceInterface si) {
-		this.si = si;
-	}
+	//public void setServiceInterface(ServiceInterface si) {
+	//	this.si = si;
+	//}
 	
 	// the method to actually submit the job -- not used from previous version
 	private void submitJob() {
@@ -206,6 +195,7 @@ public class BlastPanels extends JPanel implements JobCreationPanel {
 			@Override
 			public void run() {
 				try {
+					/*
 					// disable the submit button so the user can't inadvertently
 					// submit 2 jobs in a row
 					lockUI(true);

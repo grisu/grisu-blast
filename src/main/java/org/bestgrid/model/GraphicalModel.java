@@ -8,7 +8,7 @@ import grisu.frontend.model.job.JobObject;
 
 import org.apache.commons.cli.*;
 
-public class BlastModel extends AbstractBlastJob{
+public class GraphicalModel extends AbstractBlastJob{
 	//private double accumulator, opr; 
 	//private char op;
 	
@@ -38,11 +38,82 @@ public class BlastModel extends AbstractBlastJob{
 	
 	private String commandline;
 	
-	public BlastModel() { 
+	public GraphicalModel() { 
 		
 		//accumulator = 0.0;
 		
 	} 
+	
+	//for the gui
+	public void createCommand() {
+		commandline ="";
+		String old = this.commandline;
+		String append;
+		
+		if(db != null) {
+			System.out.println("setting commandline -d " + getDatabase());
+			old = this.commandline;
+			append = " -d " + getDatabase();
+			this.commandline = old + append;
+		}
+		
+		if(blast != null) {
+			System.out.println("setting commandline -p " + getBlast());
+			old = this.commandline;
+			append = " -p " + getBlast();
+			this.commandline = old + append;
+		}
+		
+		if(filename != null) {
+			System.out.println("setting commandline -i " + filename);
+			old = this.commandline;
+			append = " -i " + filename;
+			this.commandline = old + append;
+		}
+		
+		if(output != null) {
+			System.out.println("setting commandline -o " + getOutput());
+			old = this.commandline;
+			append = " -o " + this.output;
+			this.commandline = old + append;
+		}
+		
+		//optional parameters
+		if(start != null && stop != null) {
+			System.out.println("setting commandline -query_loc start=" + start + " stop=" + stop);
+			old = this.commandline;
+			append = " -query_loc " + getQueryLocation();
+			this.commandline = old + append;
+		} 
+		
+		if(gencode != null) {
+			System.out.println("setting commandline -query_gencode " + getQueryGencode());
+			old = this.commandline;
+			append = " -query_gencode " + getQueryGencode();
+			this.commandline = old + append;
+		}
+		
+		if(eValue != null) {
+			System.out.println("setting commandline -evalue " + getEValue());
+			old = this.commandline;
+			append = " -evalue " + getEValue();
+			this.commandline = old + append;
+		}
+		
+		if(matrix != null) {
+			System.out.println("setting commandline -matrix " + getMatrix());
+			old = this.commandline;
+			append = " -matrix " + getMatrix();
+			this.commandline = old + append;
+		}
+		
+		if(lCaseMask) {
+			System.out.println("setting commandline -lcase_masking");
+			old = this.commandline;
+			append = " -lcase_masking ";
+			this.commandline = old + append;
+		}
+	}
 	
 	public void constructCommand() {		
 		commandline ="";
@@ -141,8 +212,12 @@ public class BlastModel extends AbstractBlastJob{
 		}
 		
 		if(filename != null) {
+			System.out.println("input file defined... setting up");
 			try {
+				System.out.println("trying...");
+				setFastaFile(filename);
 				if(fm.fileExists(getFastaFile())) {
+					System.out.println("checking file existence...");
 					System.out.println("setting commandline -i " + getFastaFile().getName());
 					old = this.commandline;
 					append = " -i " + getFastaFile().getName();
@@ -268,7 +343,7 @@ public class BlastModel extends AbstractBlastJob{
 			
 			if(line.hasOption("lcase_masking")) {
 				System.out.println("argument -lcase_masking ");
-				setLCaseMask();
+				setLCaseMask(true);
 			}
 			
 			if(line.hasOption("word_size")) {
@@ -394,8 +469,8 @@ public class BlastModel extends AbstractBlastJob{
 		return this.wordSize;
 	}
 
-	private void setLCaseMask() {
-		lCaseMask = true;
+	public void setLCaseMask(boolean b) {
+		lCaseMask = b;
 	}
 
 	private void setSoftMask(String bool) throws IllegalArgumentException {
@@ -418,7 +493,7 @@ public class BlastModel extends AbstractBlastJob{
 		return seg;
 	}
 
-	private void setMatrix(String matrix) {
+	public void setMatrix(String matrix) {
 		this.matrix = matrix;
 	}
 
@@ -426,7 +501,7 @@ public class BlastModel extends AbstractBlastJob{
 		return matrix;
 	}
 	
-	private void setEValue(String value) throws NumberFormatException {
+	public void setEValue(String value) throws NumberFormatException {
 		Integer.parseInt(value);
 		eValue = value;
 	}
@@ -435,13 +510,21 @@ public class BlastModel extends AbstractBlastJob{
 		return eValue;
 	}
 	
-	private void setQueryGencode(String gencode) throws NumberFormatException {
+	public void setQueryGencode(String gencode) throws NumberFormatException {
 		Integer.parseInt(gencode);
 		this.gencode = gencode;
 	}
 	
 	private String getQueryGencode() {
 		return gencode;
+	}
+	
+	//if from gui
+	public void setQueryFrom(String from) {
+		start = from;
+	}
+	public void setQueryTo(String to) {
+		stop = to;
 	}
 	
 	private void setQueryLocation(String startstop) {
