@@ -8,17 +8,11 @@ import grisu.frontend.view.swing.jobcreation.widgets.SubmissionLogPanel;
 import java.awt.Component;
 import java.awt.EventQueue;
 
-import org.bestgrid.view.Viewer;
+import org.bestgrid.view.BlastSubmissionPanel;
 
 public class MpiBlast extends GrisuApplicationWindow {
 
 	public static String MPI_BLAST_DEFAULT_VERSION = "1.6.0";
-
-	//public final ServiceInterface si;
-	
-	// a ready-made widget that, once connected to a JobObject, tracks the
-	// progress of a job submission...
-	private SubmissionLogPanel submissionLogPanel;
 
 	public static void main(String[] args) {
 
@@ -37,6 +31,14 @@ public class MpiBlast extends GrisuApplicationWindow {
 		});
 
 	}
+
+	//public final ServiceInterface si;
+
+	public JobCreationPanel[] panels = null;
+
+	// a ready-made widget that, once connected to a JobObject, tracks the
+	// progress of a job submission...
+	private SubmissionLogPanel submissionLogPanel;
 
 	// pretty much everything is done for us in the superclass
 	public MpiBlast() {
@@ -66,7 +68,19 @@ public class MpiBlast extends GrisuApplicationWindow {
 	public JobCreationPanel[] getJobCreationPanels() {
 		// only one type of job submission in our case, you can have more though
 		// (e.g. a basic one and an advanced)
-		return new JobCreationPanel[] { new Viewer(this) };
+		// return new JobCreationPanel[] { new Viewer(this) };
+		if (panels == null) {
+			panels = new JobCreationPanel[] { new BlastSubmissionPanel() };
+		}
+		return panels;
+	}
+
+	@Override
+	public String getName() {
+		// if you leave it the way it is, the name of your artifact will be the
+		// title of the java frame of this application. You can hardcode
+		// something different if you like, though.
+		return "grisu-blast";
 	}
 
 	// creating a submission log panel
@@ -76,14 +90,6 @@ public class MpiBlast extends GrisuApplicationWindow {
 			submissionLogPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		}
 		return submissionLogPanel;
-	}
-	
-	@Override
-	public String getName() {
-		// if you leave it the way it is, the name of your artifact will be the
-		// title of the java frame of this application. You can hardcode
-		// something different if you like, though.
-		return "grisu-blast";
 	}
 
 	@Override
