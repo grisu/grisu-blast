@@ -12,6 +12,8 @@ import org.bestgrid.view.BlastSubmissionPanel;
 
 public class MpiBlast extends GrisuApplicationWindow {
 
+	public static final String MPI_BLAST_APP_NAME = "mpiblast";
+
 	public static String MPI_BLAST_DEFAULT_VERSION = "1.6.0";
 
 	public static void main(String[] args) {
